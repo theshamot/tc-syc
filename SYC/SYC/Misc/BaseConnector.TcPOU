@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="BaseConnector" Id="{a4e3b6d8-322f-496d-8bff-a7ec971249cd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK BaseConnector
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+VAR_STAT
+	sp	: SymbolProvider;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

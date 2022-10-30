@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="ConditionConfig" Id="{eb28fe82-d717-4247-8f44-545d36f05065}">
+    <Declaration><![CDATA[TYPE ConditionConfig :
+STRUCT
+	symbol		: __SYSTEM.AnyType;
+	
+	index		: UINT;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

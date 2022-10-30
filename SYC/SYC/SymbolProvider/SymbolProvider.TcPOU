@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="SymbolProvider" Id="{ccdf0a92-c83e-4ca8-b12b-f611b2f5fff7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK SymbolProvider
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	VariableList: ARRAY[0..99] OF Symbol;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetSymbolDescription" Id="{f9dd9374-6082-4cbf-ab40-385a761477d2}">
+      <Declaration><![CDATA[METHOD GetSymbolDescription : STRING
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterSymbol" Id="{96c0f692-0f49-4663-ac18-6a8d1a152eb5}">
+      <Declaration><![CDATA[METHOD RegisterSymbol : BOOL
+VAR_INPUT
+	SymbolVar		: ANY;
+	Description		: STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

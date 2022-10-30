@@ -1,0 +1,109 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <FileVersion>1.0.0.0</FileVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{c0b74987-23bc-4525-966a-a61fc7f0c41b}</ProjectGuid>
+    <SubObjectsSortedByName>True</SubObjectsSortedByName>
+    <DownloadApplicationInfo>true</DownloadApplicationInfo>
+    <WriteProductVersion>true</WriteProductVersion>
+    <GenerateTpy>false</GenerateTpy>
+    <Name>SYC</Name>
+    <ProgramVersion>3.1.4023.0</ProgramVersion>
+    <Application>{0d2e0223-d477-4bc2-bdbc-0f122959e10a}</Application>
+    <TypeSystem>{bbaee64a-7e76-4e0c-bf81-1163c7785e65}</TypeSystem>
+    <Implicit_Task_Info>{26174ad7-421d-40c6-8cc4-acfd1d93e3d2}</Implicit_Task_Info>
+    <Implicit_KindOfTask>{fdb9e419-57cb-4198-8040-086ac0e05603}</Implicit_KindOfTask>
+    <Implicit_Jitter_Distribution>{a99ac9f4-d67f-4c43-a951-77e9037f2c5e}</Implicit_Jitter_Distribution>
+    <LibraryReferences>{6ea5cc1a-b881-478b-925d-7c0cb7999b83}</LibraryReferences>
+    <Released>false</Released>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Class Diagram.TcCD">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Misc\BaseConnector.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PlcTask.TcTTO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\Condition.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\ConditionConfig.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\E_Result.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\Sequencer.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\StepAction.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\StepCondition.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\StepConfig.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\StepLog.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\StepStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SymbolProvider\Symbol.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SymbolProvider\SymbolProvider.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Misc" />
+    <Folder Include="SymbolProvider" />
+    <Folder Include="Sequencer" />
+  </ItemGroup>
+  <ItemGroup>
+    <PlaceholderReference Include="Tc2_Standard">
+      <DefaultResolution>Tc2_Standard, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Standard</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_System">
+      <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_Module">
+      <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_Module</Namespace>
+    </PlaceholderReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SYC.tmc">
+      <SubType>Content</SubType>
+    </None>
+  </ItemGroup>
+  <ProjectExtensions>
+    <PlcProjectOptions>
+      <XmlArchive>
+        <Data>
+          <o xml:space="preserve" t="OptionKey">
+      <v n="Name">"&lt;ProjectRoot&gt;"</v>
+      <d n="SubKeys" t="Hashtable" />
+      <d n="Values" t="Hashtable" />
+    </o>
+        </Data>
+        <TypeList>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="OptionKey">{54dd0eac-a6d8-46f2-8c27-2f43c7e49861}</Type>
+          <Type n="String">System.String</Type>
+        </TypeList>
+      </XmlArchive>
+    </PlcProjectOptions>
+  </ProjectExtensions>
+</Project>

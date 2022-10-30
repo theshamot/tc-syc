@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="Sequencer" Id="{96f6bf52-4db2-4922-9ade-c20affde30d0}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Sequencer EXTENDS BaseConnector
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	actions		: ARRAY[0..99] OF StepAction;
+	conditions	: ARRAY[0..99] OF StepCondition;	
+	
+	steps		: ARRAY[0..99] OF StepConfig;
+
+	currentStepNumber: 	INT;
+	StepHistory: 		POINTER TO StepLog;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="RegisterAction" Id="{f8d51ba0-bd37-4d12-9644-bd208115b87e}">
+      <Declaration><![CDATA[METHOD RegisterAction : BOOL
+VAR_INPUT
+	name			: STRING;
+	number			: INT;
+	description		: STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterCondition" Id="{840e9851-9aaf-4dae-9629-426dcf8a91f9}">
+      <Declaration><![CDATA[METHOD RegisterCondition : BOOL
+VAR_INPUT
+	name			: STRING;
+	condition		: Condition;
+	description		: STRING;
+	
+	nextStep		: STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//conditions.append()]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RegisterStep" Id="{96da1b3e-7424-4646-a2fe-875bf94ac36d}">
+      <Declaration><![CDATA[METHOD RegisterStep : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <ObjectProperties>
+      <XmlArchive>
+        <Data>
+          <o xml:space="preserve" t="UMLStereoTypeContainerObject">
+            <v n="IsType" t="UMLType">BaseArea</v>
+            <v n="Stereotype">""</v>
+            <d n="Stereotypes" t="Hashtable" />
+          </o>
+        </Data>
+        <TypeList>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="String">System.String</Type>
+          <Type n="UMLStereoTypeContainerObject">{30250973-b110-4e31-b562-c102e042dca4}</Type>
+          <Type n="UMLType">{0197b136-405a-42ee-bb27-fd08b621d0cf}</Type>
+        </TypeList>
+      </XmlArchive>
+    </ObjectProperties>
+  </POU>
+</TcPlcObject>

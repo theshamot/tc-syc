@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="Condition" Id="{1d377d48-3645-4a62-8c22-ed504447601c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Condition EXTENDS BaseConnector
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	config		: ARRAY[0..99] OF ConditionConfig;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="AndIs" Id="{dafbc798-3481-496e-bdce-7334af149d57}">
+      <Declaration><![CDATA[METHOD AndIs : Condition
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AndIsNot" Id="{8711eddd-8360-4b17-bf47-dc2bb0f47c6b}">
+      <Declaration><![CDATA[METHOD AndIsNot : Condition
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Is" Id="{b29c744b-2cbb-408d-9901-5c0d667f11d2}">
+      <Declaration><![CDATA[METHOD Is : Condition
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsNot" Id="{eb1363f5-8800-437b-9dab-7e9f64ff6ef5}">
+      <Declaration><![CDATA[METHOD IsNot : Condition
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OrIs" Id="{02886fb2-cdb6-4577-b186-b3f04d68735c}">
+      <Declaration><![CDATA[METHOD OrIs : Condition
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="OrIsNot" Id="{915f0eaf-e761-4267-b9b2-211fbfa70a1f}">
+      <Declaration><![CDATA[METHOD OrIsNot : Condition
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Satisfied" Id="{3113431e-b25f-4d30-b220-6416ed2fcb70}">
+      <Declaration><![CDATA[PROPERTY Satisfied : BOOL]]></Declaration>
+      <Get Name="Get" Id="{4402da1e-296c-40c9-ad04-d77fde28b9ac}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <ObjectProperties>
+      <XmlArchive>
+        <Data>
+          <o xml:space="preserve" t="UMLStereoTypeContainerObject">
+            <v n="IsType" t="UMLType">BaseArea</v>
+            <v n="Stereotype">""</v>
+            <d n="Stereotypes" t="Hashtable" />
+          </o>
+        </Data>
+        <TypeList>
+          <Type n="Hashtable">System.Collections.Hashtable</Type>
+          <Type n="String">System.String</Type>
+          <Type n="UMLStereoTypeContainerObject">{30250973-b110-4e31-b562-c102e042dca4}</Type>
+          <Type n="UMLType">{0197b136-405a-42ee-bb27-fd08b621d0cf}</Type>
+        </TypeList>
+      </XmlArchive>
+    </ObjectProperties>
+  </POU>
+</TcPlcObject>
