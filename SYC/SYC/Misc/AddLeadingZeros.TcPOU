@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="AddLeadingZeros" Id="{5641fd56-3091-44da-af40-a1a6a765cb15}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION AddLeadingZeros : STRING
+VAR_INPUT
+	str : STRING;
+	charNumber : USINT;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[AddLeadingZeros := str;
+IF charNumber > LEN(str) THEN
+	AddLeadingZeros := CONCAT('0', AddLeadingZeros);
+	AddLeadingZeros := .AddLeadingZeros(AddLeadingZeros, charNumber);
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

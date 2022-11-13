@@ -24,6 +24,9 @@
     <Compile Include="MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Misc\AddLeadingZeros.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Misc\BaseConnector.TcPOU">
       <SubType>Code</SubType>
     </Compile>

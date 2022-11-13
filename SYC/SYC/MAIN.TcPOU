@@ -7,6 +7,11 @@ VAR
 	ss : STRING;
 	
 	re : Regex;
+	pat : STRING;
+	tex : STRING;
+	res : bool;
+	
+	prof : Profiler;
 	
 	seq : Sequencer;
 	firstCycle : BOOL := TRUE;
@@ -16,7 +21,11 @@ END_VAR
     <Implementation>
       <ST><![CDATA[t();
 
+res := re.match(pat, tex);
 
+prof(START := TRUE, RESET := TRUE);
+ss := t.GetTimeString('Aktualni cas je {h}:{mm}:{ss}:{SSS} - {dddd}.{MMMM}.{yyyy}');
+prof(START := FALSE, RESET := FALSE);
 //IF firstCycle THEN
 //	firstCycle := FALSE;
 	

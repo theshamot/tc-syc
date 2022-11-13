@@ -7,11 +7,29 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	start : UINT;
+	length : UINT;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[//https://stackoverflow.com/questions/4040835/how-do-i-write-a-simple-regular-expression-pattern-matching-function-in-c-or-c]]></ST>
     </Implementation>
+    <Method Name="incMatchPos" Id="{26ab737c-e413-40af-9a4d-23dc430b87fa}">
+      <Declaration><![CDATA[METHOD incMatchPos : BOOL
+VAR_INPUT
+	isMatch : BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF isMatch THEN
+	length := length + 1;
+ELSE
+	start := start + 1;
+	length := 0;
+END_IF
+incMatchPos := isMatch;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="match" Id="{9b9816b4-16ed-4e1a-8995-a98c7b11e48b}">
       <Declaration><![CDATA[METHOD match : BOOL
 VAR_INPUT
@@ -20,7 +38,9 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[match := matchP(ADR(pattern), ADR(text));]]></ST>
+        <ST><![CDATA[start := 1;
+length := 0;
+match := matchP(ADR(pattern), ADR(text));]]></ST>
       </Implementation>
     </Method>
     <Method Name="matchHere" Id="{0dd7116e-2356-48e6-b697-620cfeda3484}">
@@ -42,6 +62,7 @@ ELSIF P2CHAR(pattern) = '$$' AND P2CHAR(pattern + 1) = '$00' THEN
 	RETURN;
 ELSIF text^ <> '$00' AND (P2CHAR(pattern) = '.' OR P2CHAR(pattern) = P2CHAR(text)) THEN
 	matchHere := THIS^.matchHere(pattern + 1, text + 1);
+	incMatchPos(matchHere);
 	RETURN;
 END_IF
 
@@ -72,6 +93,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[IF P2CHAR(pattern) = '^' THEN
 	matchP := matchHere(pattern + 1, text);
+	RETURN;
 END_IF
 REPEAT
 	IF matchHere(pattern, text) THEN
@@ -79,7 +101,7 @@ REPEAT
 		RETURN;
 	END_IF
 UNTIL
-	NOT(P2CHAR(text) <> '$00') AND (text := text + 1) <> NULL //pointer dereference and increment oneliner
+	NOT(P2CHAR(text) <> '$00') AND (text := text + 1) <> NULL AND (incMatchPos(matchP) OR TRUE) //pointer dereference and increment oneliner
 END_REPEAT
 
 
@@ -111,7 +133,7 @@ END_VAR]]></Declaration>
 		RETURN;
 	END_IF
 UNTIL
-	NOT(P2CHAR(text) <> '$00' AND (P2CHAR(text) = c OR c = '.')) AND (text := text + 1) > null
+	NOT(P2CHAR(text) <> '$00' AND (P2CHAR(text) = c OR c = '.')) AND (text := text + 1) > null AND (incMatchPos(NOT matchStar) OR TRUE)
 END_REPEAT
 
 

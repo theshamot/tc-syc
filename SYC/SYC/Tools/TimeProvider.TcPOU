@@ -46,19 +46,164 @@ END_VAR
         <ST><![CDATA[localSystemTime(bEnable := TRUE);]]></ST>
       </Implementation>
     </Method>
+    <Method Name="GetMonthName" Id="{91d99de0-20f1-48c5-955c-7131500af3fe}">
+      <Declaration><![CDATA[METHOD GetMonthName : STRING
+VAR_INPUT
+	monthNumber			: UINT;
+	shortName			: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF shortName THEN
+	CASE monthNumber OF
+		1	: GetMonthName := 'Jan';
+		2	: GetMonthName := 'Feb';
+		3	: GetMonthName := 'Mar';
+		4	: GetMonthName := 'Apr';
+		5	: GetMonthName := 'May';
+		6	: GetMonthName := 'Jun';
+		7	: GetMonthName := 'Jul';
+		8	: GetMonthName := 'Aug';
+		9	: GetMonthName := 'Sep';
+		10	: GetMonthName := 'Oct';
+		11	: GetMonthName := 'Nov';
+		12	: GetMonthName := 'Dec';
+	END_CASE
+ELSE
+	CASE monthNumber OF
+		1	: GetMonthName := 'January';
+		2	: GetMonthName := 'February';
+		3	: GetMonthName := 'March';
+		4	: GetMonthName := 'April';
+		5	: GetMonthName := 'May';
+		6	: GetMonthName := 'June';
+		7	: GetMonthName := 'July';
+		8	: GetMonthName := 'August';
+		9	: GetMonthName := 'September';
+		10	: GetMonthName := 'October';
+		11	: GetMonthName := 'November';
+		12	: GetMonthName := 'December';
+	END_CASE
+END_IF]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="GetTimeString" Id="{679679f2-ee04-47f6-8dbf-036ccba99ed1}">
       <Declaration><![CDATA[METHOD GetTimeString : STRING
 VAR_INPUT
 	format : STRING; //hh:mm:ss:SSS dd:MM:yyyy https://www.ibm.com/docs/en/rtw/9.0.1?topic=reference-formatting-parsing-date-time-patterns
 END_VAR
 VAR
-	l : INT := LEN(format);
-	i : INT;
+	re : Regex;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[WHILE i <= l DO
-	NULL;
-END_WHILE]]></ST>
+        <ST><![CDATA[// TODO: needs rework
+(*
+	regex - also can return matched string
+	while re.length > 0
+		case regex.string
+			h
+			hh
+			m
+			mm
+			mmm
+			.
+			.
+			.
+*)
+
+
+GetTimeString := format;
+
+re.match('{hh*}', GetTimeString);
+CASE re.length OF
+	3 : 
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wHour), L := re.length, P := re.start);
+	4 :
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wHour), 2), L := re.length, P := re.start);
+END_CASE
+re.match('{mm*}', GetTimeString);
+CASE re.length OF
+	3 : 
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMinute), L := re.length, P := re.start);
+	4 :
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMinute), 2), L := re.length, P := re.start);
+END_CASE
+re.match('{ss*}', GetTimeString);
+CASE re.length OF
+	3 : 
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wSecond), L := re.length, P := re.start);
+	4 :
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wSecond), 2), L := re.length, P := re.start);
+END_CASE
+re.match('{SS*}', GetTimeString);
+CASE re.length OF
+	3 : 
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMilliseconds/100), L := re.length, P := re.start);
+	4 :
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds/10), 2), L := re.length, P := re.start);
+	5 :
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds), 3), L := re.length, P := re.start);
+END_CASE
+
+re.match('{dd*}', GetTimeString);
+CASE re.length OF
+	3 : 
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wDay), L := re.length, P := re.start);
+	4 :
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wDay), 2), L := re.length, P := re.start);
+	5:
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, TRUE), L := re.length, P := re.start);
+	6:
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, FALSE), L := re.length, P := re.start);
+END_CASE
+re.match('{MM*}', GetTimeString);
+CASE re.length OF
+	3 : 
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMonth), L := re.length, P := re.start);
+	4 :
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMonth), 2), L := re.length, P := re.start);
+	5:
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, TRUE), L := re.length, P := re.start);
+	6:
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, FALSE), L := re.length, P := re.start);
+END_CASE
+re.match('{yy*}', GetTimeString);
+CASE re.length OF
+	3..6 : 
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := RIGHT(TO_STRING(localSystemTime.systemTime.wYear), re.length - 2), L := re.length, P := re.start);
+END_CASE
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetWeekdayName" Id="{99a7f3ff-bde0-440a-b816-7ab555a7320b}">
+      <Declaration><![CDATA[METHOD GetWeekdayName : STRING
+VAR_INPUT
+	weekDayNumber		: UINT;
+	shortName			: BOOL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF shortName THEN
+	CASE weekDayNumber OF
+		0	: GetWeekdayName := 'Sun';
+		1	: GetWeekdayName := 'Mon';
+		2	: GetWeekdayName := 'Tue';
+		3	: GetWeekdayName := 'Wed';
+		4	: GetWeekdayName := 'Thu';
+		5	: GetWeekdayName := 'Fri';
+		6	: GetWeekdayName := 'Sat';
+	END_CASE
+ELSE
+	CASE weekDayNumber OF
+		0	: GetWeekdayName := 'Sunday';
+		1	: GetWeekdayName := 'Monday';
+		2	: GetWeekdayName := 'Tuesday';
+		3	: GetWeekdayName := 'Wednesday';
+		4	: GetWeekdayName := 'Thursday';
+		5	: GetWeekdayName := 'Friday';
+		6	: GetWeekdayName := 'Saturday';
+	END_CASE
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Property Name="Timestamp" Id="{08bcd9a2-bdae-4771-98e3-9c00ad89897d}">
