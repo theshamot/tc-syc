@@ -3,11 +3,70 @@
   <POU Name="MAIN" Id="{711c9c87-dd2c-40bf-a050-a3708e521dd8}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
+	t : TimeProvider;
+	ss : STRING;
+	
+	re : Regex;
+	
 	seq : Sequencer;
+	firstCycle : BOOL := TRUE;
+	test : BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[]]></ST>
+      <ST><![CDATA[t();
+
+
+//IF firstCycle THEN
+//	firstCycle := FALSE;
+	
+//	RegisterActions();
+	
+//END_IF
+
+//seq();
+
+//CASE seq.currentStep.actionNumber OF
+//	0 : // lock to home pos;
+//		IF test THEN
+//			seq.FinishAction();
+//		END_IF
+//	10 : // lift to home pos;
+//	20 : // door open;
+
+//END_CASE
+
+
+
+////naplánovat chování sequenceru
+
+
+
+]]></ST>
     </Implementation>
+    <Action Name="RegisterActions" Id="{663b0111-1fee-4952-b388-ee530e3b0e65}">
+      <Implementation>
+        <ST><![CDATA[seq.ClearActions();
+
+seq.RegisterAction(
+	name := 'unlock',
+	number := 0,
+	description := 'Unlock pallet',
+	timeout := T#5S
+);
+seq.RegisterAction(
+	name := 'lift-down',
+	number := 10,
+	description := 'Lower pallet',
+	timeout := T#5S
+);
+seq.RegisterAction(
+	name := 'door-open',
+	number := 20,
+	description := 'Open station output door',
+	timeout := T#5S
+);]]></ST>
+      </Implementation>
+    </Action>
   </POU>
 </TcPlcObject>

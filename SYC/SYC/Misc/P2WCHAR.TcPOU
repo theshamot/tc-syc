@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="P2WCHAR" Id="{ba926b66-5857-4b56-a633-1867d0a64390}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION P2WCHAR : WCHAR
+VAR_INPUT
+	p : POINTER TO WSTRING;
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[P2WCHAR := p^;]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

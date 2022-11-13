@@ -4,8 +4,9 @@
     <Declaration><![CDATA[TYPE StepAction :
 STRUCT
 	name			: STRING;
-	stepNumber		: INT;
+	number		: INT;
 	description		: STRING;
+	timeout			: TIME;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

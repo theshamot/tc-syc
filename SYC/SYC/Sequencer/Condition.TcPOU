@@ -8,6 +8,7 @@ VAR_OUTPUT
 END_VAR
 VAR
 	config		: ARRAY[0..99] OF ConditionConfig;
+	result		: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>

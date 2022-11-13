@@ -7,29 +7,40 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	VariableList: ARRAY[0..99] OF Symbol;
+	list : ARRAY[0..99] OF Symbol;
+	lastIndex : UINT := 0;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="GetSymbolDescription" Id="{f9dd9374-6082-4cbf-ab40-385a761477d2}">
-      <Declaration><![CDATA[METHOD GetSymbolDescription : STRING
+    <Method Name="Get" Id="{f9dd9374-6082-4cbf-ab40-385a761477d2}">
+      <Declaration><![CDATA[METHOD Get : STRING
 VAR_INPUT
+	symbol : ANY;
 END_VAR
-]]></Declaration>
+VAR
+	i : UINT;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[FOR i := 0 TO lastIndex DO
+	IF symbol.pValue = list[i].info.pValue THEN
+		Get := list[i].description;
+		RETURN;
+	END_IF
+END_FOR]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RegisterSymbol" Id="{96c0f692-0f49-4663-ac18-6a8d1a152eb5}">
-      <Declaration><![CDATA[METHOD RegisterSymbol : BOOL
+    <Method Name="Register" Id="{96c0f692-0f49-4663-ac18-6a8d1a152eb5}">
+      <Declaration><![CDATA[METHOD Register : BOOL
 VAR_INPUT
-	SymbolVar		: ANY;
-	Description		: STRING;
+	symbol				: ANY;
+	descriptionName		: STRING;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[list[lastIndex].info := symbol;
+list[lastIndex].description := descriptionName;
+]]></ST>
       </Implementation>
     </Method>
   </POU>

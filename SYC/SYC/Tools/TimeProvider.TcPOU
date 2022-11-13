@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="TimeProvider" Id="{e0628be4-a9c9-48e0-bed6-4aecca528c6a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK TimeProvider
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	localSystemTime						: FB_LocalSystemTime;
+	
+	// timestamp
+	getTimeZoneInformation 			: FB_GetTimeZoneInformation;
+    timeZoneInformation 			: ST_TimeZoneInformation;
+    specificLocalTimeToFileTime 	: FB_TzSpecificLocalTimeToFileTime;
+    fileTime						: T_FILETIME;
+    onZerothSecondLastCycle 		: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[localSystemTime(bEnable := FALSE);
+
+
+//https://stackoverflow.com/questions/41773732/how-do-i-get-the-unix-timestamp-in-twincat3
+
+// On the zeroth second of each minutesync timezone information
+IF (timeZoneInformation.standardName = '' OR (localSystemTime.systemTime.wSecond = 0 AND NOT onZerothSecondLastCycle)) THEN
+    getTimeZoneInformation(sNetID := '', bExecute := TRUE, tzInfo => timeZoneInformation);
+END_IF;
+
+// Convert local system time to unix timestamps
+specificLocalTimeToFileTime(in := Tc2_Utilities.SYSTEMTIME_TO_FILETIME(localSystemTime.systemTime), tzInfo := timeZoneInformation, out => fileTime);
+//seconds := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000000 - 11644473600;
+//milliseconds := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;
+
+onZerothSecondLastCycle := localSystemTime.systemTime.wSecond = 0;]]></ST>
+    </Implementation>
+    <Method Name="FB_init" Id="{0eeee39d-a42c-4906-b99a-b1a54180bb7e}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[localSystemTime(bEnable := TRUE);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetTimeString" Id="{679679f2-ee04-47f6-8dbf-036ccba99ed1}">
+      <Declaration><![CDATA[METHOD GetTimeString : STRING
+VAR_INPUT
+	format : STRING; //hh:mm:ss:SSS dd:MM:yyyy https://www.ibm.com/docs/en/rtw/9.0.1?topic=reference-formatting-parsing-date-time-patterns
+END_VAR
+VAR
+	l : INT := LEN(format);
+	i : INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[WHILE i <= l DO
+	NULL;
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Timestamp" Id="{08bcd9a2-bdae-4771-98e3-9c00ad89897d}">
+      <Declaration><![CDATA[PROPERTY Timestamp : ULINT // Unix timestamp in milliseconds]]></Declaration>
+      <Get Name="Get" Id="{e69d997d-74c0-42cf-885a-62d0470c50b9}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[// TODO is this even right?
+Timestamp := (SHL(DWORD_TO_ULINT(fileTime.dwHighDateTime), 32) + DWORD_TO_ULINT(fileTime.dwLowDateTime)) / 10000 - 11644473600000;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="TimeStruct" Id="{297e10ee-4ad8-4580-817a-d120a347bf4a}">
+      <Declaration><![CDATA[PROPERTY TimeStruct : TIMESTRUCT // Week starts with Sunday]]></Declaration>
+      <Get Name="Get" Id="{a9eb649c-2014-4f19-aa8e-497503863d4e}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TimeStruct := localSystemTime.systemTime;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="TimeStructISO8601" Id="{ac78a099-70e2-4548-bf43-8738b34279ec}">
+      <Declaration><![CDATA[PROPERTY TimeStructISO8601 : TIMESTRUCT // Week starts with Monday]]></Declaration>
+      <Get Name="Get" Id="{d91c40a9-9619-4d0f-86b9-f7b899b22f54}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[TimeStructISO8601 := localSystemTime.systemTime;
+IF TimeStructISO8601.wDayOfWeek = 0 THEN
+	TimeStructISO8601.wDayOfWeek := 6; // Move Sunday to the end of the week
+ELSE
+	TimeStructISO8601.wDayOfWeek := TimeStructISO8601.wDayOfWeek - 1;
+END_IF]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

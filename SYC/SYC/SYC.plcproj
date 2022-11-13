@@ -27,6 +27,18 @@
     <Compile Include="Misc\BaseConnector.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Misc\CHAR.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Misc\WCHAR.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Misc\P2CHAR.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Misc\P2WCHAR.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
@@ -34,6 +46,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sequencer\ConditionConfig.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\CurrentStep.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Sequencer\E_Result.TcTLEO">
@@ -63,9 +78,19 @@
     <Compile Include="SymbolProvider\SymbolProvider.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\Regex.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tools\WRegex.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tools\TimeProvider.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Misc" />
+    <Folder Include="Tools" />
     <Folder Include="SymbolProvider" />
     <Folder Include="Sequencer" />
   </ItemGroup>
@@ -77,6 +102,14 @@
     <PlaceholderReference Include="Tc2_System">
       <DefaultResolution>Tc2_System, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_System</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc2_Utilities">
+      <DefaultResolution>Tc2_Utilities, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc2_Utilities</Namespace>
+    </PlaceholderReference>
+    <PlaceholderReference Include="Tc3_JsonXml">
+      <DefaultResolution>Tc3_JsonXml, * (Beckhoff Automation GmbH)</DefaultResolution>
+      <Namespace>Tc3_JsonXml</Namespace>
     </PlaceholderReference>
     <PlaceholderReference Include="Tc3_Module">
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>

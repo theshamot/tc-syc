@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="WRegex" Id="{a5b185d9-92eb-4529-b83e-472c460ee4e1}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK WRegex
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//https://stackoverflow.com/questions/4040835/how-do-i-write-a-simple-regular-expression-pattern-matching-function-in-c-or-c]]></ST>
+    </Implementation>
+    <Method Name="match" Id="{a88ffb20-3129-4ca8-b3e2-222baa1ad9f3}">
+      <Declaration><![CDATA[METHOD match : BOOL
+VAR_INPUT
+	pattern : WSTRING;
+	text	: WSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[match := wmatchP(ADR(pattern), ADR(text));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="wmatchHere" Id="{dec7dfc2-df7f-4461-8e43-6e50ea9a4217}">
+      <Declaration><![CDATA[METHOD PRIVATE wmatchHere : BOOL
+VAR_INPUT
+	pattern : POINTER TO WSTRING;
+	text	: POINTER TO WSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF P2WCHAR(pattern) = "$0000" THEN
+	wmatchHere := TRUE;
+	RETURN;
+ELSIF P2WCHAR(pattern + 2) = "*" THEN
+	wmatchHere := wmatchStar(P2WCHAR(pattern), pattern + 4, text);
+	RETURN;
+ELSIF P2WCHAR(pattern) = "$$" AND P2WCHAR(pattern + 2) = "$0000" THEN
+	wmatchHere := P2WCHAR(text) = "$0000";
+	RETURN;
+ELSIF text^ <> "$0000" AND (P2WCHAR(pattern) = "." OR P2WCHAR(pattern) = P2WCHAR(text)) THEN
+	wmatchHere := THIS^.wmatchHere(pattern + 2, text + 2);
+	RETURN;
+END_IF
+
+
+
+///* matchhere: search FOR regexp AT beginning OF text */
+//int matchhere(char *regexp, char *text)
+//{
+//    if (regexp[0] == '\0')
+//        return 1;
+//    if (regexp[1] == '*')
+//        return matchstar(regexp[0], regexp+2, text);
+//    if (regexp[0] == '$' && regexp[1] == '\0')
+//        return *text == '\0';
+//    if (*text!='\0' && (regexp[0]=='.' || regexp[0]==*text))
+//        return matchhere(regexp+1, text+1);
+//    return 0;
+//}]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="wmatchP" Id="{866881e8-a0f9-4e2e-aae1-be084330cf5e}">
+      <Declaration><![CDATA[METHOD wmatchP : BOOL
+VAR_INPUT
+	pattern : POINTER TO WSTRING;
+	text	: POINTER TO WSTRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF P2WCHAR(pattern) = "^" THEN
+	wmatchP := wmatchHere(pattern + 2, text);
+END_IF
+REPEAT
+	IF wmatchHere(pattern, text) THEN
+		wmatchP := TRUE;
+		RETURN;
+	END_IF
+UNTIL
+	NOT(P2WCHAR(text) <> "$0000") AND (text := text + 2) <> NULL //pointer dereference and increment oneliner
+END_REPEAT
+
+
+///* match: search FOR regexp anywhere in text */
+//int match(char *regexp, char *text)
+//{
+//    if (regexp[0] == '^')
+//        return matchhere(regexp+1, text);
+//    do {    /* must look even if string is empty */
+//        if (matchhere(regexp, text))
+//            return 1;
+//    } while (*text++ != '\0');
+//    return 0;
+//}]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="wmatchStar" Id="{30cabedd-c3b8-4f1e-9697-32b6bba70c30}">
+      <Declaration><![CDATA[METHOD PRIVATE wmatchStar : BOOL
+VAR_INPUT
+	c		: WCHAR;
+	pattern : POINTER TO WSTRING;
+	text	: POINTER TO WSTRING;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[REPEAT
+	IF wmatchHere(pattern, text) THEN
+		wmatchStar := TRUE;
+		RETURN;
+	END_IF
+UNTIL
+	NOT(P2WCHAR(text) <> "$0000" AND (P2WCHAR(text) = c OR c = ".")) AND (text := text + 2) > null
+END_REPEAT
+wmatchStar := FALSE;
+
+
+///* matchstar: search FOR c*regexp AT beginning OF text */
+//int matchstar(int c, char *regexp, char *text)
+//{
+//    do {    /* a * matches zero or more instances */
+//        if (matchhere(regexp, text))
+//            return 1;
+//    } while (*text != '\0' && (*text++ == c || c == '.'));
+//    return 0;
+//}]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
