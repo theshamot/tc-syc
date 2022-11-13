@@ -24,7 +24,7 @@ END_VAR
 res := re.match(pat, tex).found;
 
 prof(START := TRUE, RESET := TRUE);
-ss := t.GetTimeString('Aktualni cas je {h}:{mm}:{ss}:{SSS} - {dddd}.{MMMM}.{yyyy}');
+ss := t.GetTimeString('Aktualni cas je {h}:{m}:{s}');
 prof(START := FALSE, RESET := FALSE);
 //IF firstCycle THEN
 //	firstCycle := FALSE;
