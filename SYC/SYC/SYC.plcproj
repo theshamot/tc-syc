@@ -84,6 +84,9 @@
     <Compile Include="Tools\Regex.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\RegexMatch.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tools\WRegex.TcPOU">
       <SubType>Code</SubType>
     </Compile>

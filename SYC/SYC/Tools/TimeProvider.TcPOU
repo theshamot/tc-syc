@@ -115,62 +115,62 @@ END_VAR]]></Declaration>
 GetTimeString := format;
 
 re.match('{hh*}', GetTimeString);
-CASE re.length OF
+CASE re.result.length OF
 	3 : 
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wHour), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wHour), L := re.result.length, P := re.result.start);
 	4 :
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wHour), 2), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wHour), 2), L := re.result.length, P := re.result.start);
 END_CASE
 re.match('{mm*}', GetTimeString);
-CASE re.length OF
+CASE re.result.length OF
 	3 : 
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMinute), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMinute), L := re.result.length, P := re.result.start);
 	4 :
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMinute), 2), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMinute), 2), L := re.result.length, P := re.result.start);
 END_CASE
 re.match('{ss*}', GetTimeString);
-CASE re.length OF
+CASE re.result.length OF
 	3 : 
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wSecond), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wSecond), L := re.result.length, P := re.result.start);
 	4 :
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wSecond), 2), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wSecond), 2), L := re.result.length, P := re.result.start);
 END_CASE
 re.match('{SS*}', GetTimeString);
-CASE re.length OF
+CASE re.result.length OF
 	3 : 
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMilliseconds/100), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMilliseconds/100), L := re.result.length, P := re.result.start);
 	4 :
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds/10), 2), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds/10), 2), L := re.result.length, P := re.result.start);
 	5 :
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds), 3), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds), 3), L := re.result.length, P := re.result.start);
 END_CASE
 
 re.match('{dd*}', GetTimeString);
-CASE re.length OF
+CASE re.result.length OF
 	3 : 
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wDay), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wDay), L := re.result.length, P := re.result.start);
 	4 :
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wDay), 2), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wDay), 2), L := re.result.length, P := re.result.start);
 	5:
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, TRUE), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, TRUE), L := re.result.length, P := re.result.start);
 	6:
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, FALSE), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, FALSE), L := re.result.length, P := re.result.start);
 END_CASE
 re.match('{MM*}', GetTimeString);
-CASE re.length OF
+CASE re.result.length OF
 	3 : 
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMonth), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMonth), L := re.result.length, P := re.result.start);
 	4 :
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMonth), 2), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMonth), 2), L := re.result.length, P := re.result.start);
 	5:
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, TRUE), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, TRUE), L := re.result.length, P := re.result.start);
 	6:
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, FALSE), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, FALSE), L := re.result.length, P := re.result.start);
 END_CASE
 re.match('{yy*}', GetTimeString);
-CASE re.length OF
+CASE re.result.length OF
 	3..6 : 
-		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := RIGHT(TO_STRING(localSystemTime.systemTime.wYear), re.length - 2), L := re.length, P := re.start);
+		GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := RIGHT(TO_STRING(localSystemTime.systemTime.wYear), re.result.length - 2), L := re.result.length, P := re.result.start);
 END_CASE
 ]]></ST>
       </Implementation>

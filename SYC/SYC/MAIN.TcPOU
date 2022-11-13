@@ -21,7 +21,7 @@ END_VAR
     <Implementation>
       <ST><![CDATA[t();
 
-res := re.match(pat, tex);
+res := re.match(pat, tex).found;
 
 prof(START := TRUE, RESET := TRUE);
 ss := t.GetTimeString('Aktualni cas je {h}:{mm}:{ss}:{SSS} - {dddd}.{MMMM}.{yyyy}');

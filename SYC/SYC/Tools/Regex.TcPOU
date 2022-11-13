@@ -7,8 +7,7 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	start : UINT;
-	length : UINT;
+	result : RegexMatch;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -22,25 +21,29 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[IF isMatch THEN
-	length := length + 1;
+	result.length := result.length + 1;
 ELSE
-	start := start + 1;
-	length := 0;
+	result.start := result.start + 1;
+	result.length := 0;
 END_IF
 incMatchPos := isMatch;]]></ST>
       </Implementation>
     </Method>
     <Method Name="match" Id="{9b9816b4-16ed-4e1a-8995-a98c7b11e48b}">
-      <Declaration><![CDATA[METHOD match : BOOL
+      <Declaration><![CDATA[METHOD match : REFERENCE TO RegexMatch
 VAR_INPUT
 	pattern : STRING;
 	text	: STRING;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[start := 1;
-length := 0;
-match := matchP(ADR(pattern), ADR(text));]]></ST>
+        <ST><![CDATA[result.start := 1;
+result.length := 0;
+result.found := matchP(ADR(pattern), ADR(text));
+result.text := MID(STR := text, POS := result.start, LEN := result.length);
+
+match REF= result;
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="matchHere" Id="{0dd7116e-2356-48e6-b697-620cfeda3484}">
