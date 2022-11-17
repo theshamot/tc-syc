@@ -87,8 +87,54 @@ ELSE
 END_IF]]></ST>
       </Implementation>
     </Method>
-    <Method Name="GetTimeString" Id="{679679f2-ee04-47f6-8dbf-036ccba99ed1}">
+    <Method Name="GetTimeString" Id="{d822cbd4-2c50-4585-aed6-540e16d608da}">
       <Declaration><![CDATA[METHOD GetTimeString : STRING
+VAR_INPUT
+	format : STRING; //hh:mm:ss:SSS dd:MM:yyyy https://www.ibm.com/docs/en/rtw/9.0.1?topic=reference-formatting-parsing-date-time-patterns
+END_VAR
+VAR
+	placeholder : STRING(4);
+	
+	beginIndex	: INT;
+	endIndex	: INT;
+	length		: INT;
+		
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GetTimeString := format;
+
+WHILE (beginIndex := FIND(GetTimeString, '{')) > 0 AND (endIndex := FIND(GetTimeString, '}')) > (beginIndex + 1) AND  (length := endIndex - beginIndex - 1) > 0 DO
+	
+	placeholder := MID(STR := GetTimeString, POS := beginIndex + 1, LEN := length);
+		
+	IF 		placeholder = 'h' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wHour), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'hh' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wHour), 2), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'm' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMinute), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'mm' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMinute), 2), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 's' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wSecond), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'ss' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wSecond), 2), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'S' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMilliseconds/100), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'SS' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds/10), 2), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'SSS' 	THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds), 3), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'd' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wDay), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'dd' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wDay), 2), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'ddd' 	THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, TRUE), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'dddd'	THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, FALSE), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'M' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMonth), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'MM' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMonth), 2), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'MMM' 	THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, TRUE), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'MMMM'	THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, FALSE), L := length + 2, P := beginIndex);
+	ELSIF 	placeholder = 'y' OR placeholder = 'yy' OR placeholder = 'yyy' OR placeholder = 'yyyy'
+									THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := RIGHT(TO_STRING(localSystemTime.systemTime.wYear), length), L := length + 2, P := beginIndex);
+	ELSE 
+			GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := 'ERR', L := length + 2, P := beginIndex);
+	END_IF
+END_WHILE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetTimeStringRe" Id="{679679f2-ee04-47f6-8dbf-036ccba99ed1}">
+      <Declaration><![CDATA[// deprecated. Use optimized GetTimeString() instead
+METHOD GetTimeStringRe : STRING
 VAR_INPUT
 	format : STRING; //hh:mm:ss:SSS dd:MM:yyyy https://www.ibm.com/docs/en/rtw/9.0.1?topic=reference-formatting-parsing-date-time-patterns
 END_VAR
@@ -97,32 +143,32 @@ VAR
 	placeholder : STRING(4);
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[GetTimeString := format;
+        <ST><![CDATA[GetTimeStringRe := format;
 
-WHILE re.match('{.*}', GetTimeString).found DO
+WHILE re.match('{.*}', GetTimeStringRe).found DO
 	placeholder := MID(STR := re.result.text, POS := 2, LEN := re.result.length - 2);
 	
-	IF 		placeholder = 'h' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wHour), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'hh' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wHour), 2), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'm' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMinute), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'mm' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMinute), 2), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 's' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wSecond), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'ss' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wSecond), 2), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'S' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMilliseconds/100), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'SS' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds/10), 2), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'SSS' 	THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds), 3), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'd' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wDay), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'dd' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wDay), 2), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'ddd' 	THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, TRUE), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'dddd'	THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, FALSE), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'M' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := TO_STRING(localSystemTime.systemTime.wMonth), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'MM' 		THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMonth), 2), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'MMM' 	THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, TRUE), L := re.result.length, P := re.result.start);
-	ELSIF 	placeholder = 'MMMM'	THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, FALSE), L := re.result.length, P := re.result.start);
+	IF 		placeholder = 'h' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := TO_STRING(localSystemTime.systemTime.wHour), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'hh' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wHour), 2), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'm' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := TO_STRING(localSystemTime.systemTime.wMinute), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'mm' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMinute), 2), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 's' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := TO_STRING(localSystemTime.systemTime.wSecond), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'ss' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wSecond), 2), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'S' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := TO_STRING(localSystemTime.systemTime.wMilliseconds/100), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'SS' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds/10), 2), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'SSS' 	THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMilliseconds), 3), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'd' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := TO_STRING(localSystemTime.systemTime.wDay), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'dd' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wDay), 2), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'ddd' 	THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, TRUE), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'dddd'	THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := GetWeekdayName(localSystemTime.systemTime.wDayOfWeek, FALSE), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'M' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := TO_STRING(localSystemTime.systemTime.wMonth), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'MM' 		THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := AddLeadingZeros(TO_STRING(localSystemTime.systemTime.wMonth), 2), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'MMM' 	THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, TRUE), L := re.result.length, P := re.result.start);
+	ELSIF 	placeholder = 'MMMM'	THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := GetMonthName(localSystemTime.systemTime.wMonth, FALSE), L := re.result.length, P := re.result.start);
 	ELSIF 	placeholder = 'y' OR placeholder = 'yy' OR placeholder = 'yyy' OR placeholder = 'yyyy'
-									THEN GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := RIGHT(TO_STRING(localSystemTime.systemTime.wYear), re.result.length - 2), L := re.result.length, P := re.result.start);
+									THEN GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := RIGHT(TO_STRING(localSystemTime.systemTime.wYear), re.result.length - 2), L := re.result.length, P := re.result.start);
 	ELSE 
-			GetTimeString := REPLACE( STR1 := GetTimeString, STR2 := 'ERR', L := re.result.length, P := re.result.start);
+			GetTimeStringRe := REPLACE( STR1 := GetTimeStringRe, STR2 := 'ERR', L := re.result.length, P := re.result.start);
 	END_IF
 END_WHILE]]></ST>
       </Implementation>

@@ -4,7 +4,8 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	t : TimeProvider;
-	ss : STRING;
+	today : STRING;
+	sn : STRING;
 	
 	re : Regex;
 	pat : STRING;
@@ -12,6 +13,7 @@ VAR
 	res : bool;
 	
 	prof : Profiler;
+	prof1 : Profiler;
 	
 	seq : Sequencer;
 	firstCycle : BOOL := TRUE;
@@ -24,8 +26,13 @@ END_VAR
 res := re.match(pat, tex).found;
 
 prof(START := TRUE, RESET := TRUE);
-ss := t.GetTimeString('Aktualni cas je {h}:{m}:{s}');
+today := t.GetTimeStringRe('Today is {dddd} {d}.{m}.{yyyy}. Current time is {hh}:{mm}.');
 prof(START := FALSE, RESET := FALSE);
+
+prof1(START := TRUE, RESET := TRUE);
+sn := t.GetTimeString('SN{yy}{mm}{dd}{hh}{mm}{ss}{S}');
+prof1(START := FALSE, RESET := FALSE);
+
 //IF firstCycle THEN
 //	firstCycle := FALSE;
 	
