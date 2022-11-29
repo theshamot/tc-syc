@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="SimpleStepLogger" Id="{9faac3e8-48d7-49fe-952d-cf47e26750bf}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK SimpleStepLogger
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	logArray		: 	ARRAY[0..99] OF SimpleStepLog;
+END_VAR
+VAR
+	count				: UINT;
+	lastStepNumber		: LINT;
+	stepWatch			: TON;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="AutoLog" Id="{4fcf5be8-4d5a-4f87-b0f2-b331d8d5bf43}">
+      <Declaration><![CDATA[METHOD AutoLog : BOOL
+VAR_INPUT
+	step	: SimpleStepLog;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF step.number <> lastStepNumber THEN
+	LogStep(step);
+	lastStepNumber := step.number;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{f3f4c03f-8741-4561-911d-194fc27664b6}">
+      <Declaration><![CDATA[METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[stepWatch(IN := TRUE, PT := DWORD_TO_TIME(16#FFFF_FFFF));]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="LogStep" Id="{1d32ab5d-259b-489b-afb7-cdc6c7c995e5}">
+      <Declaration><![CDATA[METHOD LogStep : BOOL
+VAR_INPUT
+	step	: SimpleStepLog;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MEMMOVE(
+	destAddr := ADR(logArray[1]),
+	srcAddr := ADR(logArray[0]),
+	n := SIZEOF(logArray[0]) * 99
+);
+
+logArray[0] := step;
+
+IF count < 100 THEN
+	
+	count := count + 1;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

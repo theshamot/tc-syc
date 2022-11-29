@@ -75,6 +75,12 @@
     <Compile Include="Sequencer\StepStatus.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SimpleStepLogger\SimpleStepLog.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SimpleStepLogger\SimpleStepLogger.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SymbolProvider\Symbol.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -96,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Misc" />
+    <Folder Include="SimpleStepLogger" />
     <Folder Include="Tools" />
     <Folder Include="SymbolProvider" />
     <Folder Include="Sequencer" />
