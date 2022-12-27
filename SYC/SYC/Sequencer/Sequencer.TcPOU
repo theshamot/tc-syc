@@ -8,7 +8,7 @@ VAR_OUTPUT
 END_VAR
 VAR
 	actions		: ARRAY[0..99] OF StepAction;
-	lastAction : INT := 0;
+	lastAction 	: INT := 0;
 	conditions	: ARRAY[0..99] OF StepCondition;	
 	
 	steps		: ARRAY[0..99] OF StepConfig;

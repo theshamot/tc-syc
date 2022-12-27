@@ -21,45 +21,38 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[t();
-
-res := re.match(pat, tex).found;
-
-prof(START := TRUE, RESET := TRUE);
-today := t.GetTimeStringRe('Today is {dddd} {d}.{m}.{yyyy}. Current time is {hh}:{mm}.');
-prof(START := FALSE, RESET := FALSE);
-
-prof1(START := TRUE, RESET := TRUE);
-sn := t.GetTimeString('SN{yy}{mm}{dd}{hh}{mm}{ss}{S}');
-prof1(START := FALSE, RESET := FALSE);
-
-//IF firstCycle THEN
-//	firstCycle := FALSE;
+      <ST><![CDATA[IF firstCycle THEN
+	firstCycle := FALSE;
 	
-//	RegisterActions();
+	RegisterActions();
 	
-//END_IF
+END_IF
 
-//seq();
+seq();
 
-//CASE seq.currentStep.actionNumber OF
-//	0 : // lock to home pos;
-//		IF test THEN
-//			seq.FinishAction();
-//		END_IF
-//	10 : // lift to home pos;
-//	20 : // door open;
+CASE seq.currentStep.actionNumber OF
+	0 : // lock to home pos;
+		IF test THEN
+			seq.FinishAction();
+		END_IF
+	10 : // lift to home pos;
+	20 : // door open;
 
-//END_CASE
+END_CASE
 
-
-
-////naplánovat chování sequenceru
-
-
-
-]]></ST>
+ahoj(a := 2,);]]></ST>
     </Implementation>
+    <Method Name="ahoj" Id="{ca328c36-785d-459b-b886-8eada79bf85e}">
+      <Declaration><![CDATA[METHOD ahoj : BOOL
+VAR_INPUT
+	a : INT := 1;
+	b : INT := 2;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
     <Action Name="RegisterActions" Id="{663b0111-1fee-4952-b388-ee530e3b0e65}">
       <Implementation>
         <ST><![CDATA[seq.ClearActions();
