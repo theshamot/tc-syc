@@ -12,32 +12,32 @@ VAR
 	currentAction : StepAction;
 	startAction	: STRING;
 	
-	conditions	: ARRAY[0..99] OF StepCondition;
+	conditions	: ARRAY[0..MAX_CONDITION] OF StepCondition;
 	lastCondition : INT := 0;
 	currentCondition : StepCondition;
 	
-	timer		: TON;
+	timer		: TON := (PT := MAX_TIME);
 	
 END_VAR
 VAR CONSTANT
 	MAX_ACTION	: INT := 99;
+	MAX_CONDITION : INT := 99;
 END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-timer(IN := TRUE, PT := MAX_TIME);
+timer(IN := TRUE);
 
-IF timer.ET > currentAction.timeout THEN
+IF currentCondition.condition.satisfied THEN
+	
+	ChangeStep(currentCondition.nextAction);
+ELSIF currentAction.timeout > T#0S AND_THEN timer.ET > currentAction.timeout THEN
 	
 	ChangeStep(currentAction.timeoutAction);
-ELSIF timer.ET > currentCondition.timeout THEN
+ELSIF currentCondition.timeout > T#0S AND_THEN timer.ET > currentCondition.timeout THEN
 
 	ChangeStep(currentCondition.timeoutAction);
 END_IF
-
-//IF currentConditon.satisfied THEN
-	
-//	ChangeStep(currentCondition.nextStep);
-//END_IF]]></ST>
+]]></ST>
     </Implementation>
     <Method Name="Bind" Id="{47e9fe29-6598-4e88-9005-0f5c4bb7df72}">
       <Declaration><![CDATA[METHOD Bind : REFERENCE TO Transition
@@ -65,7 +65,11 @@ FOR i := 0 TO MAX_ACTION DO
 		
 		currentAction := actions[i];
 	END_IF
-END_FOR]]></ST>
+END_FOR
+
+timer(IN := FALSE);
+timer(IN := TRUE);
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="LogChange" Id="{4b28a56a-afbe-43ad-b2ae-8c249f80c93c}">
@@ -106,7 +110,6 @@ lastAction := lastAction + 1;]]></ST>
       <Declaration><![CDATA[METHOD RegisterCondition : REFERENCE TO Condition
 VAR_INPUT
 	name			: STRING;
-	condition		: Condition;
 	nextAction		: STRING;
 	timeout			: TIME;
 	timeoutAction	: STRING;
@@ -121,7 +124,9 @@ c.nextAction := nextAction;
 c.timeout := timeout;
 c.timeoutAction := timeoutAction;
 
-lastCondition := lastCondition + 1;]]></ST>
+lastCondition := lastCondition + 1;
+
+RegisterCondition REF= c.condition;]]></ST>
       </Implementation>
     </Method>
     <Method Name="Start" Id="{5362ef16-7c50-4f2d-a7d6-f8f0db87a7bf}">
@@ -131,7 +136,7 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[this^.startAction := startAction; 
+        <ST><![CDATA[THIS^.startAction := startAction; 
 
 ChangeStep(startAction);]]></ST>
       </Implementation>

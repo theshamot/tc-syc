@@ -4,7 +4,7 @@
     <Declaration><![CDATA[VAR_GLOBAL CONSTANT
 	MAX_DWORD	: DWORD := 4294967295;
 	MAX_DWORD_2	: DWORD := -1;
-	MAX_TIME	: TIME := DWORD_TO_TIME(MAX_DWORD);
+	MAX_TIME	: TIME := TO_TIME(MAX_DWORD);
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

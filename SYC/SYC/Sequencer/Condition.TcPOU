@@ -70,8 +70,8 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
-    <Property Name="Satisfied" Id="{3113431e-b25f-4d30-b220-6416ed2fcb70}">
-      <Declaration><![CDATA[PROPERTY Satisfied : BOOL]]></Declaration>
+    <Property Name="satisfied" Id="{3113431e-b25f-4d30-b220-6416ed2fcb70}">
+      <Declaration><![CDATA[PROPERTY satisfied : BOOL]]></Declaration>
       <Get Name="Get" Id="{4402da1e-296c-40c9-ad04-d77fde28b9ac}">
         <Declaration><![CDATA[VAR
 END_VAR
