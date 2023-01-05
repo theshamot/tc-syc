@@ -3,17 +3,10 @@
   <POU Name="MAIN" Id="{711c9c87-dd2c-40bf-a050-a3708e521dd8}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
-	t : TimeProvider;
-	today : STRING;
-	sn : STRING;
-	
-	re : Regex;
-	pat : STRING;
-	tex : STRING;
-	res : bool;
-	
-	prof : Profiler;
-	prof1 : Profiler;
+	sensor1 : BOOL;
+	sensor2 : BOOL;
+	sensor3 : BOOL;
+	counter1 : INT;
 	
 	seq : Sequencer;
 	firstCycle : BOOL := TRUE;
@@ -30,51 +23,97 @@ END_IF
 
 seq();
 
-CASE seq.currentStep.actionNumber OF
-	0 : // lock to home pos;
-		IF test THEN
-			seq.FinishAction();
-		END_IF
-	10 : // lift to home pos;
-	20 : // door open;
+CASE seq.currentAction.caseNumber OF
+	0 : // action code 1
+	10 : // action code 2
+	20 : // action code 3
+	30 : // action code 4
 
-END_CASE
-
-ahoj(a := 2,);]]></ST>
+END_CASE]]></ST>
     </Implementation>
-    <Method Name="ahoj" Id="{ca328c36-785d-459b-b886-8eada79bf85e}">
-      <Declaration><![CDATA[METHOD ahoj : BOOL
-VAR_INPUT
-	a : INT := 1;
-	b : INT := 2;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
     <Action Name="RegisterActions" Id="{663b0111-1fee-4952-b388-ee530e3b0e65}">
       <Implementation>
-        <ST><![CDATA[seq.ClearActions();
+        <ST><![CDATA[//seq.ClearActions();
 
+//seq.RegisterAction(
+//	name := 'name 1',
+//	number := 0
+//);
+//seq.RegisterAction(
+//	name := 'name 2',
+//	number := 10
+//);
+//seq.RegisterAction(
+//	name := 'name 3',
+//	number := 20
+//);
+//seq.RegisterAction(
+//	name := 'name 4',
+//	number := 30
+//);]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="RegisterAll" Id="{d88f312f-a0ad-4b5d-93e2-81141268fc29}">
+      <Implementation>
+        <ST><![CDATA[// Register actions
 seq.RegisterAction(
-	name := 'unlock',
-	number := 0,
-	description := 'Unlock pallet',
-	timeout := T#5S
+	name := 'name 1',
+	caseNumber := 0
 );
 seq.RegisterAction(
-	name := 'lift-down',
-	number := 10,
-	description := 'Lower pallet',
-	timeout := T#5S
+	name := 'name 2',
+	caseNumber := 10
 );
 seq.RegisterAction(
-	name := 'door-open',
-	number := 20,
-	description := 'Open station output door',
-	timeout := T#5S
-);]]></ST>
+	name := 'name 3',
+	caseNumber := 20
+);
+seq.RegisterAction(
+	name := 'name 4',
+	caseNumber := 30
+);
+
+// Register conditions
+seq.RegisterCondition('cond 1').Is(sensor1);
+seq.RegisterCondition('cond 2').Is(sensor2).AndIs(sensor3);
+seq.RegisterCondition('cond 3').Is(sensor3);
+seq.RegisterCondition('cond 4').Is(sensor3);
+
+// Bind them together
+seq.Bind('name 1')
+	.WhenGoTo('cond 1', 'name 2');
+seq.Bind('name 2')
+	.WhenGoTo('cond 2', 'name 3')
+	.WhenGoTo('cond 3', 'name 4');
+seq.Bind('name 3')
+	.WhenGoTo('cond 3', 'name 4');
+seq.Bind('name 4')
+	.WhenGoTo('cond 4', 'name 1');
+]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="RegisterConditions" Id="{ee97d2a6-ceaa-455d-8101-7fa903610d86}">
+      <Implementation>
+        <ST><![CDATA[//seq.ClearConditions();
+
+//seq.RegisterCondition('cond 1').Is(sensor1);
+//seq.RegisterCondition('cond 2').Is(sensor2).AndIs(sensor3);
+//seq.RegisterCondition('cond 3').Is(sensor3);
+//seq.RegisterCondition('cond 4').Is(sensor3);]]></ST>
+      </Implementation>
+    </Action>
+    <Action Name="RegisterTransitions" Id="{c8a3c281-1247-4144-bb87-275feaa83da2}">
+      <Implementation>
+        <ST><![CDATA[//seq.Bind('name 1')
+//	.WhenGoTo('cond 1', 'name 2');
+//seq.Bind('name 2')
+//	.WhenGoTo('cond 2', 'name 3')
+//	.WhenGoTo('cond 3', 'name 4');
+//seq.Bind('name 3')
+//	.WhenGoTo('cond 3', 'name 4');
+//seq.Bind('name 4')
+//	.WhenGoTo('cond 4', 'name 1');
+]]></ST>
       </Implementation>
     </Action>
   </POU>

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="StepTransition" Id="{32049ed0-25dd-445c-a0ed-3990f8b1b9ad}">
+    <Declaration><![CDATA[TYPE StepTransition :
+STRUCT
+	actionName		: STRING;
+	conditionName	: STRING;
+	nextActionName	: STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

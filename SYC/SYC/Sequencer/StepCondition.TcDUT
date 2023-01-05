@@ -5,7 +5,9 @@
 STRUCT
 	name			: STRING;
 	condition		: Condition;
-	description		: STRING;
+	nextAction		: STRING;
+	timeout			: TIME;
+	timeoutAction	: STRING;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

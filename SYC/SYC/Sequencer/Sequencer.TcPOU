@@ -7,115 +7,133 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	actions		: ARRAY[0..99] OF StepAction;
+	actions		: ARRAY[0..MAX_ACTION] OF StepAction;
 	lastAction 	: INT := 0;
-	conditions	: ARRAY[0..99] OF StepCondition;	
+	currentAction : StepAction;
+	startAction	: STRING;
 	
-	steps		: ARRAY[0..99] OF StepConfig;
+	conditions	: ARRAY[0..99] OF StepCondition;
+	lastCondition : INT := 0;
+	currentCondition : StepCondition;
 	
 	timer		: TON;
 	
-	currentStep		: CurrentStep;
-	stepHistory		: ARRAY[0..99] OF StepLog;
-	stepCount		: INT;
 END_VAR
-]]></Declaration>
+VAR CONSTANT
+	MAX_ACTION	: INT := 99;
+END_VAR]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-timer(IN := NOT currentStep.actionDone, PT := actions[currentStep.number].timeout);
-currentStep.elapsedTime := timer.ET;
+timer(IN := TRUE, PT := MAX_TIME);
 
-IF currentStep.actionDone THEN
-	currentStep.actionDone := FALSE;
-	currentStep.number := currentStep.number + 1;
-END_IF]]></ST>
+IF timer.ET > currentAction.timeout THEN
+	
+	ChangeStep(currentAction.timeoutAction);
+ELSIF timer.ET > currentCondition.timeout THEN
+
+	ChangeStep(currentCondition.timeoutAction);
+END_IF
+
+//IF currentConditon.satisfied THEN
+	
+//	ChangeStep(currentCondition.nextStep);
+//END_IF]]></ST>
     </Implementation>
-    <Method Name="ClearActions" Id="{e234aa8c-2dfc-4f18-9c74-24b02e7796ad}">
-      <Declaration><![CDATA[METHOD ClearActions : BOOL
+    <Method Name="Bind" Id="{47e9fe29-6598-4e88-9005-0f5c4bb7df72}">
+      <Declaration><![CDATA[METHOD Bind : REFERENCE TO Transition
 VAR_INPUT
+	actionName	: STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="ChangeStep" Id="{9cd436d0-78d3-48a5-89e7-03d922c3d837}">
+      <Declaration><![CDATA[METHOD ChangeStep : BOOL
+VAR_INPUT
+	actionName		: STRING;
 END_VAR
 VAR
 	i : INT;
-	empty : StepAction;
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[FOR i := 0 TO lastAction DO
-	actions[i] := empty;
-END_FOR
-
-lastAction := 0;]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="FinishAction" Id="{74bb703b-0db8-40d5-b298-d4a6defd6d09}">
-      <Declaration><![CDATA[METHOD FinishAction : BOOL
-VAR_INPUT
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-LogFinishedStep();
+        <ST><![CDATA[LogChange(currentAction.name, Condition, actionName);
 
-currentStep.actionDone := TRUE;]]></ST>
+FOR i := 0 TO MAX_ACTION DO
+	IF (actions[i].name = actionName) THEN
+		
+		currentAction := actions[i];
+	END_IF
+END_FOR]]></ST>
       </Implementation>
     </Method>
-    <Method Name="LogFinishedStep" Id="{77f6ba39-958d-4e71-8824-745c67b1204f}">
-      <Declaration><![CDATA[METHOD PRIVATE LogFinishedStep : BOOL
+    <Method Name="LogChange" Id="{4b28a56a-afbe-43ad-b2ae-8c249f80c93c}">
+      <Declaration><![CDATA[METHOD PRIVATE LogChange : BOOL
 VAR_INPUT
-END_VAR
-VAR
-	l : REFERENCE TO StepLog REF= stepHistory[stepCount];
-
+	oldAction : STRING;
+	satisfiedCondition : Condition;
+	nextAction : STRING;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[l.config := steps[currentStep.number];
-l.status.elapsedTime := currentStep.elapsedTime;
-l.status.status := E_Result.done;
-
-stepCount := stepCount + 1;]]></ST>
+        <ST><![CDATA[// TODO]]></ST>
       </Implementation>
     </Method>
     <Method Name="RegisterAction" Id="{f8d51ba0-bd37-4d12-9644-bd208115b87e}">
       <Declaration><![CDATA[METHOD RegisterAction : BOOL
 VAR_INPUT
 	name			: STRING;
-	number			: INT;
+	caseNumber		: INT;
+	timeout			: TIME;
+	timeoutAction	: STRING;
 	description		: STRING;
-	timeout			: TIME := T#0S;
 END_VAR
 VAR
 	a : REFERENCE TO StepAction REF= actions[lastAction];
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[a.name := name;
-a.number := number;
-a.description := description;
+a.caseNumber := caseNumber;
 a.timeout := timeout;
+a.timeoutAction := timeoutAction;
+a.description := description;
 
 lastAction := lastAction + 1;]]></ST>
       </Implementation>
     </Method>
     <Method Name="RegisterCondition" Id="{840e9851-9aaf-4dae-9629-426dcf8a91f9}">
-      <Declaration><![CDATA[METHOD RegisterCondition : BOOL
+      <Declaration><![CDATA[METHOD RegisterCondition : REFERENCE TO Condition
 VAR_INPUT
 	name			: STRING;
 	condition		: Condition;
-	description		: STRING;
-	
-	nextStep		: STRING;
+	nextAction		: STRING;
+	timeout			: TIME;
+	timeoutAction	: STRING;
 END_VAR
-]]></Declaration>
+VAR
+	c : REFERENCE TO StepCondition REF= conditions[lastAction];
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[//conditions.append()]]></ST>
+        <ST><![CDATA[c.name := name;
+c.condition := condition;
+c.nextAction := nextAction;
+c.timeout := timeout;
+c.timeoutAction := timeoutAction;
+
+lastCondition := lastCondition + 1;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="RegisterStep" Id="{96da1b3e-7424-4646-a2fe-875bf94ac36d}">
-      <Declaration><![CDATA[METHOD RegisterStep : BOOL
+    <Method Name="Start" Id="{5362ef16-7c50-4f2d-a7d6-f8f0db87a7bf}">
+      <Declaration><![CDATA[METHOD Start : BOOL
 VAR_INPUT
+	startAction		: STRING;
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[this^.startAction := startAction; 
+
+ChangeStep(startAction);]]></ST>
       </Implementation>
     </Method>
     <ObjectProperties>

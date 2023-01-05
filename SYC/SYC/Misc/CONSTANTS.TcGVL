@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <GVL Name="CONSTANTS" Id="{0452a4dc-aaf2-46b0-870a-ec45447b5375}">
+    <Declaration><![CDATA[VAR_GLOBAL CONSTANT
+	MAX_DWORD	: DWORD := 4294967295;
+	MAX_DWORD_2	: DWORD := -1;
+	MAX_TIME	: TIME := DWORD_TO_TIME(MAX_DWORD);
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

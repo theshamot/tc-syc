@@ -4,9 +4,10 @@
     <Declaration><![CDATA[TYPE StepAction :
 STRUCT
 	name			: STRING;
-	number			: INT;
-	description		: STRING;
+	caseNumber		: INT;
 	timeout			: TIME;
+	timeoutAction	: STRING;
+	description		: STRING;
 END_STRUCT
 END_TYPE
 ]]></Declaration>

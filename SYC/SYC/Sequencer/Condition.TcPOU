@@ -15,8 +15,9 @@ END_VAR
       <ST><![CDATA[]]></ST>
     </Implementation>
     <Method Name="AndIs" Id="{dafbc798-3481-496e-bdce-7334af149d57}">
-      <Declaration><![CDATA[METHOD AndIs : Condition
+      <Declaration><![CDATA[METHOD AndIs : REFERENCE TO Condition
 VAR_INPUT
+	symbol	: ANY;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -33,8 +34,9 @@ END_VAR
       </Implementation>
     </Method>
     <Method Name="Is" Id="{b29c744b-2cbb-408d-9901-5c0d667f11d2}">
-      <Declaration><![CDATA[METHOD Is : Condition
+      <Declaration><![CDATA[METHOD Is : REFERENCE TO Condition
 VAR_INPUT
+	symbol	: ANY;
 END_VAR
 ]]></Declaration>
       <Implementation>

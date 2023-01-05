@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="Transition" Id="{ad314cb6-07a4-4fb1-811b-30d8def32fe4}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Transition
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="WhenGoTo" Id="{57e063bc-9530-4593-976f-0d6a63848838}">
+      <Declaration><![CDATA[METHOD WhenGoTo : reference TO Transition
+VAR_INPUT
+	conditionName	: STRING;
+	nextActionName	: STRING;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

@@ -33,6 +33,10 @@
     <Compile Include="Misc\CHAR.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Misc\CONSTANTS.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="Misc\WCHAR.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -48,15 +52,6 @@
     <Compile Include="Sequencer\Condition.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sequencer\ConditionConfig.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sequencer\CurrentStep.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Sequencer\E_Result.TcTLEO">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Sequencer\Sequencer.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -66,13 +61,28 @@
     <Compile Include="Sequencer\StepCondition.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sequencer\StepConfig.TcDUT">
+    <Compile Include="Sequencer\StepTransition.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sequencer\StepLog.TcDUT">
+    <Compile Include="Sequencer\Transition.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Sequencer\StepStatus.TcDUT">
+    <Compile Include="Sequencer\WIP\ConditionConfig.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\WIP\CurrentStep.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\WIP\E_Result.TcTLEO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\WIP\StepConfig.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\WIP\StepLog.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Sequencer\WIP\StepStatus.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SimpleStepLogger\SimpleStepLog.TcDUT">
@@ -102,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Misc" />
+    <Folder Include="Sequencer\WIP" />
     <Folder Include="SimpleStepLogger" />
     <Folder Include="Tools" />
     <Folder Include="SymbolProvider" />
