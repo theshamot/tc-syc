@@ -11,6 +11,10 @@ VAR
 	seq : Sequencer;
 	firstCycle : BOOL := TRUE;
 	test : BOOL;
+	ceres : CResult;
+	n1 : PVOID;
+	n2 : PVOID;
+	n3 : PVOID;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -29,7 +33,14 @@ CASE seq.currentAction.caseNumber OF
 	20 : // action code 3
 	30 : // action code 4
 
-END_CASE]]></ST>
+END_CASE
+
+Is(test);
+Is(ceres);
+
+n1 := SIZEOF(CResult);
+n2 := SIZEOF(CResult.result);
+n3 := SIZEOF(CResult.datatype);]]></ST>
     </Implementation>
     <Action Name="RegisterActions" Id="{663b0111-1fee-4952-b388-ee530e3b0e65}">
       <Implementation>
@@ -58,19 +69,23 @@ END_CASE]]></ST>
         <ST><![CDATA[// Register actions
 seq.RegisterAction(
 	name := 'name 1',
-	caseNumber := 0
+	caseNumber := 0,
+	''
 );
 seq.RegisterAction(
 	name := 'name 2',
-	caseNumber := 10
+	caseNumber := 10,
+	''
 );
 seq.RegisterAction(
 	name := 'name 3',
-	caseNumber := 20
+	caseNumber := 20,
+	''
 );
 seq.RegisterAction(
 	name := 'name 4',
-	caseNumber := 30
+	caseNumber := 30,
+	''
 );
 
 // Register conditions
@@ -88,8 +103,7 @@ seq.Bind('name 2')
 seq.Bind('name 3')
 	.WhenGoTo('cond 3', 'name 4');
 seq.Bind('name 4')
-	.WhenGoTo('cond 4', 'name 1');
-]]></ST>
+	.WhenGoTo('cond 4', 'name 1');]]></ST>
       </Implementation>
     </Action>
     <Action Name="RegisterConditions" Id="{ee97d2a6-ceaa-455d-8101-7fa903610d86}">

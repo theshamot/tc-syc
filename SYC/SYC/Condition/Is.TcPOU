@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="Is" Id="{425acda9-2594-4db6-b663-6bedf079dc11}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION Is : CResult
+VAR_INPUT
+	symbol		: ANY;
+END_VAR
+VAR
+	typeReader	: FB_JsonReadWriteDatatype;
+	t : STRING;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE symbol.TypeClass OF
+	
+	IBaseLibrary.TypeClass.TYPE_BOOL:
+
+		Is.result := PBOOL_TO_BOOL(symbol.pValue);
+		Is.datatype := TO_INT(symbol.TypeClass);
+		
+	IBaseLibrary.TypeClass.TYPE_USERDEF:
+		IF typeReader.GetDatatypeNameByAddress(pData := symbol.pValue, nData := symbol.diSize) = 'CResult' THEN
+
+			Is.result := PBOOL_TO_BOOL(symbol.pValue + ADR(Is.result) - ADR(Is));
+			Is.datatype := 420;
+		END_IF
+
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

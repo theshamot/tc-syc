@@ -21,6 +21,12 @@
     <Compile Include="Class Diagram.TcCD">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Condition\CResult.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Condition\Is.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MAIN.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -112,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Misc" />
+    <Folder Include="Condition" />
     <Folder Include="Sequencer\WIP" />
     <Folder Include="SimpleStepLogger" />
     <Folder Include="Tools" />
@@ -144,6 +151,11 @@
     <None Include="SYC.tmc">
       <SubType>Content</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <LibraryReference Include="Base Interfaces,newest,System">
+      <Namespace>IBaseLibrary</Namespace>
+    </LibraryReference>
   </ItemGroup>
   <ProjectExtensions>
     <PlcProjectOptions>

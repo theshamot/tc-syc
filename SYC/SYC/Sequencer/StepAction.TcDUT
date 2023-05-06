@@ -5,8 +5,8 @@
 STRUCT
 	name			: STRING;
 	caseNumber		: INT;
-	timeout			: TIME;
-	timeoutAction	: STRING;
+//	timeout			: TIME;
+//	timeoutAction	: STRING; these will go to binding
 	description		: STRING;
 END_STRUCT
 END_TYPE

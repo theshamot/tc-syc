@@ -27,16 +27,16 @@ END_VAR]]></Declaration>
       <ST><![CDATA[
 timer(IN := TRUE);
 
-IF currentCondition.condition.satisfied THEN
+//IF currentCondition.condition.satisfied THEN
 	
-	ChangeStep(currentCondition.nextAction);
-ELSIF currentAction.timeout > T#0S AND_THEN timer.ET > currentAction.timeout THEN
+//	ChangeStep(currentCondition.nextAction);
+//ELSIF currentAction.timeout > T#0S AND_THEN timer.ET > currentAction.timeout THEN
 	
-	ChangeStep(currentAction.timeoutAction);
-ELSIF currentCondition.timeout > T#0S AND_THEN timer.ET > currentCondition.timeout THEN
+//	ChangeStep(currentAction.timeoutAction);
+//ELSIF currentCondition.timeout > T#0S AND_THEN timer.ET > currentCondition.timeout THEN
 
-	ChangeStep(currentCondition.timeoutAction);
-END_IF
+//	ChangeStep(currentCondition.timeoutAction);
+//END_IF
 ]]></ST>
     </Implementation>
     <Method Name="Bind" Id="{47e9fe29-6598-4e88-9005-0f5c4bb7df72}">
@@ -58,7 +58,7 @@ VAR
 	i : INT;
 END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[LogChange(currentAction.name, Condition, actionName);
+        <ST><![CDATA[//LogChange(currentAction.name, Condition, actionName);
 
 FOR i := 0 TO MAX_ACTION DO
 	IF (actions[i].name = actionName) THEN
@@ -89,8 +89,6 @@ END_VAR
 VAR_INPUT
 	name			: STRING;
 	caseNumber		: INT;
-	timeout			: TIME;
-	timeoutAction	: STRING;
 	description		: STRING;
 END_VAR
 VAR
@@ -99,8 +97,8 @@ END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[a.name := name;
 a.caseNumber := caseNumber;
-a.timeout := timeout;
-a.timeoutAction := timeoutAction;
+//a.timeout := timeout;
+//a.timeoutAction := timeoutAction;
 a.description := description;
 
 lastAction := lastAction + 1;]]></ST>
@@ -110,19 +108,16 @@ lastAction := lastAction + 1;]]></ST>
       <Declaration><![CDATA[METHOD RegisterCondition : REFERENCE TO Condition
 VAR_INPUT
 	name			: STRING;
-	nextAction		: STRING;
-	timeout			: TIME;
-	timeoutAction	: STRING;
 END_VAR
 VAR
 	c : REFERENCE TO StepCondition REF= conditions[lastAction];
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[c.name := name;
-c.condition := condition;
-c.nextAction := nextAction;
-c.timeout := timeout;
-c.timeoutAction := timeoutAction;
+//c.condition := condition;
+//c.nextAction := nextAction;
+//c.timeout := timeout;
+//c.timeoutAction := timeoutAction;
 
 lastCondition := lastCondition + 1;
 

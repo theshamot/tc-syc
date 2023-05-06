@@ -5,9 +5,10 @@
 STRUCT
 	name			: STRING;
 	condition		: Condition;
-	nextAction		: STRING;
-	timeout			: TIME;
-	timeoutAction	: STRING;
+//	nextAction		: STRING;
+//	timeout			: TIME;
+//	timeoutAction	: STRING;
+	/// these will go to binding
 END_STRUCT
 END_TYPE
 ]]></Declaration>
