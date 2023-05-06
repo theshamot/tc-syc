@@ -103,6 +103,9 @@
     <Compile Include="SymbolProvider\SymbolProvider.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SymbolProvider\SymbolProvider_1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tools\Regex.TcPOU">
       <SubType>Code</SubType>
     </Compile>

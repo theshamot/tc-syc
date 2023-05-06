@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="SymbolProvider_1" Id="{3eb6e77d-d059-4a6e-a91a-7b1db2f1c35b}" SpecialFunc="None">
+    <Declaration><![CDATA[
+FUNCTION_BLOCK SymbolProvider_1
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	symbolReader		: FB_JsonReadWriteDatatype;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="GetDatatype" Id="{c228097f-b18b-47e0-a983-684b1bbad4b7}">
+      <Declaration><![CDATA[
+METHOD GetDatatype : T_MaxString
+VAR_INPUT
+	symbol			: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+GetDatatype := symbolReader.GetDatatypeNameByAddress(pData := symbol.pValue, nData := TO_UDINT(symbol.diSize));
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetFullName" Id="{634b3c22-dbca-443a-9cee-c3e15c0203fc}">
+      <Declaration><![CDATA[
+METHOD GetFullName : T_MaxString
+VAR_INPUT
+	symbol			: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+GetFullName := symbolReader.GetSymbolNameByAddress(pData := symbol.pValue, nData := TO_UDINT(symbol.diSize));
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetNameWithoutGlobalNameSpace" Id="{08b39e72-ae31-4cdc-a9c5-5dd70c689f80}">
+      <Declaration><![CDATA[
+(* Returns full symbol name without its GVL or PRG name at the beginning
+	example: for symbol 'MAIN.bStart' returns 'bStart'
+*)
+METHOD GetNameWithoutGlobalNameSpace : T_MaxString
+VAR_INPUT
+	symbol			: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+GetNameWithoutGlobalNameSpace := symbolReader.GetSymbolNameByAddress(pData := symbol.pValue, nData := TO_UDINT(symbol.diSize));
+GetNameWithoutGlobalNameSpace := RIGHT(STR := GetNameWithoutGlobalNameSpace, SIZE := LEN(GetNameWithoutGlobalNameSpace) - FIND(STR1 := GetNameWithoutGlobalNameSpace, STR2 := '.'));
+]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>
