@@ -15,6 +15,8 @@ VAR
 	n1 : PVOID;
 	n2 : PVOID;
 	n3 : PVOID;
+	
+	re : Regex;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -40,7 +42,9 @@ Is(ceres);
 
 n1 := SIZEOF(CResult);
 n2 := SIZEOF(CResult.result);
-n3 := SIZEOF(CResult.datatype);]]></ST>
+n3 := SIZEOF(CResult.datatype);
+
+re.match(pattern := 'he.*o', text := 'hellQQllo_HelloWorld').found;]]></ST>
     </Implementation>
     <Action Name="RegisterActions" Id="{663b0111-1fee-4952-b388-ee530e3b0e65}">
       <Implementation>
