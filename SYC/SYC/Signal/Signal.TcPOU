@@ -1,13 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="Signal" Id="{8db79964-529c-4eaf-8c71-b8a1feb5d0bf}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK Signal
+    <Declaration><![CDATA[
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK Signal
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
 END_VAR
 VAR		
-	signal				: REFERENCE TO BOOL;
+	symbol				: REFERENCE TO BOOL;
 	invertedLogic		: BOOL;
 	
 	_risingTrigger		: POINTER TO R_TRIG;
@@ -20,7 +22,7 @@ VAR
 	timerOffIO			: SignalTimer;
 	timerPulseIO		: SignalTimer;
 	
-	signalVal			: BOOL;
+	symbolVal			: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -32,28 +34,27 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-signalVal := signal XOR invertedLogic;
+        <ST><![CDATA[symbolVal := symbol XOR invertedLogic;
 
 IF (_risingTrigger <> 0) THEN
 	
-	_risingTrigger^(CLK := signalVal);
+	_risingTrigger^(CLK := symbolVal);
 END_IF
 IF (_fallingTrigger <> 0) THEN
 	
-	_fallingTrigger^(CLK := signalVal);
+	_fallingTrigger^(CLK := symbolVal);
 END_IF
 IF (_timerOn <> 0) THEN
 	
-	_timerOn^(IN := signalVal);
+	_timerOn^(IN := symbolVal);
 END_IF
 IF (_timerOff <> 0) THEN
 	
-	_timerOff^(IN := signalVal);
+	_timerOff^(IN := symbolVal);
 END_IF
 IF (_timerPulse <> 0) THEN
 	
-	_timerPulse^(IN := signalVal);
+	_timerPulse^(IN := symbolVal);
 END_IF
 ]]></ST>
       </Implementation>
@@ -118,14 +119,14 @@ VAR_INPUT
 	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
 	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
 	
-	signal			: REFERENCE TO BOOL; // Binded variable
+	symbol			: REFERENCE TO BOOL; // Binded variable
 	createAtStart	: STRING; // If strings RT, FT, TON, TOF, PT are found, then corresponding triggers or timers are created during init.
 	invertedLogic	: BOOL; // Some variables (e.g. optical gates) may have inverted logic
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-THIS^.signal REF= signal;
+THIS^.symbol REF= symbol;
 THIS^.invertedLogic := invertedLogic;
 
 IF (FIND(createAtStart, 'RT') > 0) THEN

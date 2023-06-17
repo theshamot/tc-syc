@@ -94,6 +94,9 @@
     <Compile Include="Signal\Signal.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Signal\SignalMapping.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Signal\SignalProvider.TcPOU">
       <SubType>Code</SubType>
     </Compile>

@@ -1,25 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="Testing" Id="{94bd2c2c-8a66-4262-a093-b67fcce3ea6f}" SpecialFunc="None">
-    <Declaration><![CDATA[PROGRAM Testing
+    <Declaration><![CDATA[
+PROGRAM Testing
 VAR
 	myVar	: BOOL;
+	myVar2	: BOOL;
 	
-	varSig	: Signal(signal := myVar, createAtStart := 'RT TON', invertedLogic := FALSE);
+//	varSig	: Signal(symbol := myVar, createAtStart := 'RT TON', invertedLogic := FALSE);
+	signal	: SignalProvider;
 	
 	test	: BOOL;
+	test2	: BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-varSig.Call();
+signal.Call();
 
-varSig.timerOn.PT := T#5S;
+IF test THEN
+	test := FALSE;
+	signal.Get(myVar);
+END_IF
 
-test S= varSig.risingTrigger;
+IF test2 THEN
+	test2 := FALSE;
+	signal.Get(myVar2).timerOn.ET;
+END_IF
 
-test R= varSig.timerOn.Q;
- ]]></ST>
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

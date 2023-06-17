@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="SignalProvider" Id="{c34772f0-d050-443b-9d67-92f94521a1c7}" SpecialFunc="None">
-    <Declaration><![CDATA[FUNCTION_BLOCK SignalProvider
+    <Declaration><![CDATA[
+FUNCTION_BLOCK SignalProvider
 VAR_INPUT
 END_VAR
 VAR_OUTPUT
@@ -10,10 +11,119 @@ VAR
 	// hashtable of signals
 	// register method creates new signal and saves pointer to hashtable
 	// register and retrieve signal by its pointer
+	
+	mappings		: ARRAY[0..10] OF SignalMapping;
+	count			: INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="Call" Id="{b316e55e-ac32-442d-b859-2429c6670890}">
+      <Declaration><![CDATA[
+METHOD Call : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	i		: INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+FOR i := 0 TO count - 1 DO
+	
+	mappings[i].signal^.Call();
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_exit" Id="{d7a180b5-aa1e-41c1-9eeb-00b4474e8d2f}">
+      <Declaration><![CDATA[
+METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+VAR
+	i	: INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+FOR i := 0 TO count DO
+	
+	__DELETE(mappings[i].signal);
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Find" Id="{aaa598f3-afa9-441a-ad6a-c6a75a0c1bf7}">
+      <Declaration><![CDATA[
+METHOD Find : INT
+VAR_INPUT
+	symbol	: REFERENCE TO BOOL;
+END_VAR
+VAR
+	address	: POINTER TO Signal;
+	i		: INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+Find := -1;
+
+address := ADR(symbol);
+
+FOR i := 0 TO count - 1 DO
+	IF mappings[i].symbol = address THEN
+		
+		Find := i;
+
+		RETURN;
+	END_IF
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Get" Id="{a580a647-5d54-42a7-95e3-e95bacb20b7e}">
+      <Declaration><![CDATA[
+METHOD Get : REFERENCE TO Signal
+VAR_INPUT
+	symbol	: REFERENCE TO BOOL;
+END_VAR
+VAR
+	found	: INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+found := Find(symbol);
+
+IF (found = -1) THEN
+	
+	Get REF= Register(symbol);
+ELSE
+	
+	Get REF= mappings[found].signal^;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Register" Id="{de0d5821-fc53-4549-9de2-506e7021a55e}">
+      <Declaration><![CDATA[
+METHOD Register : REFERENCE TO Signal
+VAR_INPUT
+	symbol	 : REFERENCE TO BOOL;	
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+mappings[count].symbol := ADR(symbol); // Use the fact, that address of reference is address of the referenced variable
+mappings[count].signal := __NEW(Signal(symbol := symbol, createAtStart := 'RT TON', invertedLogic := FALSE));
+
+Register REF= mappings[count].signal^;
+
+count := count + 1;
+]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>
