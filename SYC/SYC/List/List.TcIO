@@ -12,22 +12,37 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
-    <Property Name="datatype" Id="{c6bc2699-1bee-49b5-be56-8ebb92af4cdf}">
+    <Property Name="Datatype" Id="{c6bc2699-1bee-49b5-be56-8ebb92af4cdf}">
       <Declaration><![CDATA[
-PROPERTY datatype : ListType
+PROPERTY Datatype : ListType
 ]]></Declaration>
       <Get Name="Get" Id="{b138e580-5c0c-42fd-b580-7eb9da2885e9}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
-      <Set Name="Set" Id="{82502d21-927f-49f6-86cb-9af98b4a5778}">
-        <Declaration><![CDATA[]]></Declaration>
-      </Set>
     </Property>
+    <Method Name="FB_exit" Id="{6a8bb466-a584-4df4-a32c-5c0774398859}">
+      <Declaration><![CDATA[
+// Delete pointers
+METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="FB_init" Id="{72c30c86-9a2b-4174-ab63-5ba5c80dfcaa}">
+      <Declaration><![CDATA[
+METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+END_VAR
+]]></Declaration>
+    </Method>
     <Method Name="Get" Id="{824eaf5e-6f8d-432d-b9b2-1ece3ecf030d}">
       <Declaration><![CDATA[
 METHOD Get : BOOL
 VAR_INPUT
-	index		: INT;
+	index		: INT; // Allow for indexing from end
 	destination	: ANY;
 END_VAR
 ]]></Declaration>
@@ -36,6 +51,7 @@ END_VAR
       <Declaration><![CDATA[
 METHOD Insert : REFERENCE TO List
 VAR_INPUT
+	index	: INT; // Allow for indexing from end
 	data	: ANY;
 END_VAR
 ]]></Declaration>
@@ -55,6 +71,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="Length" Id="{75637133-746b-4a7a-a424-c47794c6c5a7}">
+      <Declaration><![CDATA[
+PROPERTY Length : ListLength
+]]></Declaration>
+      <Get Name="Get" Id="{f28c7547-3df9-456c-8f29-f927ce37b999}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Method Name="Prepend" Id="{7546d95c-bb34-4096-8df9-689a87c4271c}">
       <Declaration><![CDATA[
 METHOD Prepend : REFERENCE TO List
@@ -67,7 +91,7 @@ END_VAR
       <Declaration><![CDATA[
 METHOD Remove : REFERENCE TO List
 VAR_INPUT
-	index	: INT;
+	index	: INT; // Allow for indexing from end
 END_VAR
 ]]></Declaration>
     </Method>

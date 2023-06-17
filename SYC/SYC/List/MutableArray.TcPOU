@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MutableArray" Id="{0896bf5a-c1f5-4c12-a811-5a62ae580db1}" SpecialFunc="None">
+    <Declaration><![CDATA[
+FUNCTION_BLOCK MutableArray IMPLEMENTS List
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	arr				: PVOID;
+	_length			: ListLength;
+	_datatype		: ListType;
+	capacity		: ListLength;
+END_VAR
+VAR CONSTANT
+	GROWTH_FACTOR		: INT := 2;
+	INITIAL_CAPACITY	: INT := 2;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Append" Id="{86aa2220-f387-453b-97bc-ba6da17bc618}">
+      <Declaration><![CDATA[
+METHOD Append : REFERENCE TO List
+VAR_INPUT
+	data	: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Datatype" Id="{be2143a0-bdb5-47e8-bbf8-6e876a9e2c1f}">
+      <Declaration><![CDATA[
+PROPERTY Datatype : ListType
+]]></Declaration>
+      <Get Name="Get" Id="{f133ff08-a508-4135-bbc8-d278d812bdae}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_exit" Id="{f4735228-f18e-4f17-8f04-439136b68248}">
+      <Declaration><![CDATA[
+// Delete pointers
+METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{73465e2f-f871-489f-8a73-790e07deac14}">
+      <Declaration><![CDATA[
+METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	datatype	: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+_datatype.size := datatype.diSize;
+_datatype.typeClass := datatype.TypeClass;
+//_datatype.typeName := SymbolProvider_1.GetDatatype(datatype); // maybe in the future
+
+arr := __NEW(_datatype.size, INITIAL_CAPACITY);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Get" Id="{91069005-b335-4192-9298-7f26f935a7d7}">
+      <Declaration><![CDATA[
+METHOD Get : BOOL
+VAR_INPUT
+	index		: INT; // Allow for indexing from end
+	destination	: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Insert" Id="{3163860b-3538-4103-8d7c-cde0e326ad61}">
+      <Declaration><![CDATA[
+METHOD Insert : REFERENCE TO List
+VAR_INPUT
+	index	: INT; // Allow for indexing from end
+	data	: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsEmpty" Id="{51c08a3c-95e0-4056-a230-7c9048556011}">
+      <Declaration><![CDATA[
+METHOD IsEmpty : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="IsTypeCorrect" Id="{613606d2-eba7-4934-a39f-c49cdc6a1c35}">
+      <Declaration><![CDATA[
+METHOD IsTypeCorrect : BOOL
+VAR_INPUT
+	checkedVariable		: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="Length" Id="{6c91b064-294a-425d-93a3-c4864d879a95}">
+      <Declaration><![CDATA[
+PROPERTY Length : ListLength
+]]></Declaration>
+      <Get Name="Get" Id="{e4ce2b85-2010-4b19-afa9-1f94fd935e76}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="Prepend" Id="{6c7dd413-0931-4486-b546-958b79c32840}">
+      <Declaration><![CDATA[
+METHOD Prepend : REFERENCE TO List
+VAR_INPUT
+	data	: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Remove" Id="{16520934-f476-4100-947a-a822d99cb105}">
+      <Declaration><![CDATA[
+METHOD Remove : REFERENCE TO List
+VAR_INPUT
+	index	: INT; // Allow for indexing from end
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RemoveAll" Id="{c9620d31-acbe-4008-ade5-18acfcc46650}">
+      <Declaration><![CDATA[
+METHOD RemoveAll : REFERENCE TO List
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+  </POU>
+</TcPlcObject>

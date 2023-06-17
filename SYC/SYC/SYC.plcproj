@@ -27,7 +27,13 @@
     <Compile Include="Condition\Is.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="List\MutableArray.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="List\List.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="List\ListLength.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="List\ListType.TcDUT">
