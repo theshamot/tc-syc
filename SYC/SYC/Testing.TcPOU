@@ -7,11 +7,11 @@ VAR
 	myVar	: BOOL;
 	myVar2	: BOOL;
 	
-//	varSig	: Signal(symbol := myVar, createAtStart := 'RT TON', invertedLogic := FALSE);
-	signal	: SignalProvider;
+	signal	: SignalProvider; // has only array for 10 variables. Dynamic array is under developement
 	
 	test	: BOOL;
 	test2	: BOOL;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -20,15 +20,13 @@ signal.Call();
 
 IF test THEN
 	test := FALSE;
-	signal.Get(myVar);
+	signal.Get(myVar).timerOn.PT := T#5S;
 END_IF
 
 IF test2 THEN
 	test2 := FALSE;
-	signal.Get(myVar2).timerOn.ET;
-END_IF
-
-]]></ST>
+	signal.Register(myVar2, 'TON RT', TRUE);
+END_IF]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

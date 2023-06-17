@@ -99,7 +99,7 @@ found := Find(symbol);
 
 IF (found = -1) THEN
 	
-	Get REF= Register(symbol);
+	Get REF= Register(symbol, '', FALSE);
 ELSE
 	
 	Get REF= mappings[found].signal^;
@@ -111,13 +111,15 @@ END_IF
       <Declaration><![CDATA[
 METHOD Register : REFERENCE TO Signal
 VAR_INPUT
-	symbol	 : REFERENCE TO BOOL;	
+	symbol	 		: REFERENCE TO BOOL;
+	create			: STRING;
+	inverted		: BOOL;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 mappings[count].symbol := ADR(symbol); // Use the fact, that address of reference is address of the referenced variable
-mappings[count].signal := __NEW(Signal(symbol := symbol, createAtStart := 'RT TON', invertedLogic := FALSE));
+mappings[count].signal := __NEW(Signal(symbol := symbol, createAtStart := create, invertedLogic := inverted));
 
 Register REF= mappings[count].signal^;
 
