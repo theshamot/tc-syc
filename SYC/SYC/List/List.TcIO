@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="List" Id="{70fa5247-5b57-4846-9db9-81ed1f26b16a}">
+    <Declaration><![CDATA[
+INTERFACE List
+]]></Declaration>
+    <Method Name="Append" Id="{a92455fb-c069-4c4d-8706-764afa701dba}">
+      <Declaration><![CDATA[
+METHOD Append : REFERENCE TO List
+VAR_INPUT
+	data	: ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="datatype" Id="{c6bc2699-1bee-49b5-be56-8ebb92af4cdf}">
+      <Declaration><![CDATA[
+PROPERTY datatype : ListType
+]]></Declaration>
+      <Get Name="Get" Id="{b138e580-5c0c-42fd-b580-7eb9da2885e9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{82502d21-927f-49f6-86cb-9af98b4a5778}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Method Name="Get" Id="{824eaf5e-6f8d-432d-b9b2-1ece3ecf030d}">
+      <Declaration><![CDATA[
+METHOD Get : BOOL
+VAR_INPUT
+	index		: INT;
+	destination	: ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Insert" Id="{4d53e841-01dc-4246-9b49-a63507f8c33f}">
+      <Declaration><![CDATA[
+METHOD Insert : REFERENCE TO List
+VAR_INPUT
+	data	: ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="IsEmpty" Id="{6803efab-caed-4135-a376-bebd90afd91b}">
+      <Declaration><![CDATA[
+METHOD IsEmpty : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="IsTypeCorrect" Id="{b8da7858-f130-4783-a1e0-771bc653b1c9}">
+      <Declaration><![CDATA[
+METHOD IsTypeCorrect : BOOL
+VAR_INPUT
+	checkedVariable		: ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Prepend" Id="{7546d95c-bb34-4096-8df9-689a87c4271c}">
+      <Declaration><![CDATA[
+METHOD Prepend : REFERENCE TO List
+VAR_INPUT
+	data	: ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Remove" Id="{ef067663-f6a4-4c4f-a4f7-a2422263ba02}">
+      <Declaration><![CDATA[
+METHOD Remove : REFERENCE TO List
+VAR_INPUT
+	index	: INT;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="RemoveAll" Id="{52c369d5-946b-41da-9dcf-b0be62710028}">
+      <Declaration><![CDATA[
+METHOD RemoveAll : REFERENCE TO List
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+  </Itf>
+</TcPlcObject>
