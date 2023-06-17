@@ -91,6 +91,15 @@
     <Compile Include="Sequencer\WIP\StepStatus.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Signal\Signal.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signal\SignalProvider.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Signal\SignalTimer.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="SimpleStepLogger\SimpleStepLog.TcDUT">
       <SubType>Code</SubType>
     </Compile>
@@ -104,6 +113,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SymbolProvider\SymbolProvider_1.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Testing.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tools\Regex.TcPOU">
@@ -122,6 +134,7 @@
   <ItemGroup>
     <Folder Include="Misc" />
     <Folder Include="Condition" />
+    <Folder Include="Signal" />
     <Folder Include="Sequencer\WIP" />
     <Folder Include="SimpleStepLogger" />
     <Folder Include="Tools" />

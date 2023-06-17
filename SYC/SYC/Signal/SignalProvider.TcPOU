@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="SignalProvider" Id="{c34772f0-d050-443b-9d67-92f94521a1c7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK SignalProvider
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	// hashtable of signals
+	// register method creates new signal and saves pointer to hashtable
+	// register and retrieve signal by its pointer
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

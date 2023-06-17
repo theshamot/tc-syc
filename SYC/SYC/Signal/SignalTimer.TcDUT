@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="SignalTimer" Id="{211abaee-aa78-4f69-9dbf-404f0eacbd3d}">
+    <Declaration><![CDATA[
+// Basically just timer IO with IN input excluded as it binded to the signal variable
+TYPE SignalTimer :
+STRUCT
+	PT		: REFERENCE TO TIME;
+	
+	ET		: REFERENCE TO TIME;
+	Q		: REFERENCE TO BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
