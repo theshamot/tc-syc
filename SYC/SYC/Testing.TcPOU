@@ -1,16 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="Testing" Id="{94bd2c2c-8a66-4262-a093-b67fcce3ea6f}" SpecialFunc="None">
-    <Declaration><![CDATA[
-PROGRAM Testing
+    <Declaration><![CDATA[PROGRAM Testing
 VAR
 	myVar	: INT;
 	myVar2	: BOOL;
 	
-//	signal	: Signal(symbol := myVar, createAtStart := 'TON RT TP', invertedLogic := FALSE); // has only array for 10 variables. Dynamic array is under developement
-	
-	test	: BOOL;
-	test2	: ARRAY[0..10] OF INT;
+	testAppend	: BOOL;
+	testRemove	: BOOL;
+	removeIndex	: INT;
 	
 	mutableArr	: MutableArray;
 	
@@ -18,18 +16,15 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
-IF test THEN
-	test := false;
+      <ST><![CDATA[IF testAppend THEN
+	testAppend := FALSE;
 	mutableArr.Append(myVar);
 END_IF
 
-mutableArr.Get(-2,test2[0]);
-mutableArr.Get(-1,test2[1]);
-mutableArr.Get(0,test2[2]);
-mutableArr.Get(1,test2[3]);
-mutableArr.Get(2,test2[4]);
-mutableArr.Get(3,test2[5]);
+IF testRemove THEN
+	testRemove := FALSE;
+	mutableArr.Remove(removeIndex);
+END_IF
 
 mutTest := mutableArr.arr;
 ]]></ST>

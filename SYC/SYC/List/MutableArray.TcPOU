@@ -16,7 +16,7 @@ VAR
 END_VAR
 VAR CONSTANT
 	GROWTH_FACTOR		: UDINT := 2;
-	INITIAL_CAPACITY	: UDINT := 1;
+	INITIAL_CAPACITY	: UDINT := 2;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -78,7 +78,8 @@ END_IF
 PROPERTY Datatype : ListType
 ]]></Declaration>
       <Get Name="Get" Id="{f133ff08-a508-4135-bbc8-d278d812bdae}">
-        <Declaration><![CDATA[VAR
+        <Declaration><![CDATA[
+VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
@@ -109,24 +110,43 @@ VAR_INPUT
 END_VAR
 VAR
 	arrIndex	: UDINT;
-END_VAR]]></Declaration>
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-IF (index >= 0) THEN
-	arrIndex := TO_UDINT(index);
-ELSE
-	arrIndex := _length + TO_UDINT(index);
+IF (_length = 0 OR NOT IsTypeCorrect(destination)) THEN
+	RETURN;
 END_IF
 
-IF (_length > 0 AND arrIndex >= 0 AND arrIndex < _length AND IsTypeCorrect(destination)) THEN
+arrIndex := GetArrayIndex(index);
+
+IF (IsArrayIndexValid(arrIndex)) THEN
 
 	MEMCPY(destAddr := destination.pValue, srcAddr := arr + arrIndex * _datatype.size, n := _datatype.size);
 END_IF
 ]]></ST>
       </Implementation>
     </Method>
+    <Method Name="GetArrayIndex" Id="{10f68731-fc5f-4b7b-809d-3644ff8e93f8}">
+      <Declaration><![CDATA[
+METHOD PRIVATE GetArrayIndex : UDINT
+VAR_INPUT
+	index		: INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF (index >= 0) THEN
+	GetArrayIndex := TO_UDINT(index);
+ELSE
+	GetArrayIndex := _length + TO_UDINT(index);
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Grow" Id="{fe355488-e8cb-4e5e-8cc5-a078937f6bab}">
-      <Declaration><![CDATA[METHOD PRIVATE Grow : BOOL
+      <Declaration><![CDATA[
+METHOD PRIVATE Grow : BOOL
 VAR_INPUT
 END_VAR
 VAR
@@ -161,6 +181,19 @@ END_VAR
         <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
+    <Method Name="IsArrayIndexValid" Id="{c6a78dd1-a9ee-4fc6-949a-5e338a333330}">
+      <Declaration><![CDATA[
+METHOD PRIVATE IsArrayIndexValid : BOOL
+VAR_INPUT
+	arrIndex	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IsArrayIndexValid := arrIndex >= 0 AND arrIndex < _length;
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="IsEmpty" Id="{51c08a3c-95e0-4056-a230-7c9048556011}">
       <Declaration><![CDATA[
 METHOD IsEmpty : BOOL
@@ -168,7 +201,9 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+IsEmpty := _length = 0;
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="IsTypeCorrect" Id="{613606d2-eba7-4934-a39f-c49cdc6a1c35}">
@@ -196,11 +231,13 @@ VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[IF (_length = 0) THEN
+          <ST><![CDATA[
+IF (_length = 0) THEN
 	LastIndex := 0;
 ELSE
 	LastIndex := _length - 1;
-END_IF]]></ST>
+END_IF
+]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -209,7 +246,8 @@ END_IF]]></ST>
 PROPERTY Length : ListLength
 ]]></Declaration>
       <Get Name="Get" Id="{e4ce2b85-2010-4b19-afa9-1f94fd935e76}">
-        <Declaration><![CDATA[VAR
+        <Declaration><![CDATA[
+VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
@@ -232,11 +270,39 @@ END_VAR
       <Declaration><![CDATA[
 METHOD Remove : REFERENCE TO List
 VAR_INPUT
-	index	: INT; // Allow for indexing from end
+	index		: INT; // Allow for indexing from end
 END_VAR
-]]></Declaration>
+VAR
+	arrIndex	: UDINT;
+	moveSize	: UDINT;
+	indexAdr	: PVOID;
+END_VAR]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+IF (_length = 0) THEN
+	RETURN;
+END_IF
+
+arrIndex := GetArrayIndex(index);
+
+IF (IsArrayIndexValid(arrIndex)) THEN
+
+	moveSize := LastIndex - arrIndex;
+	indexAdr := arr + arrIndex * _datatype.size;
+	IF (moveSize = 0) THEN
+		MEMSET(destAddr := indexAdr, fillByte := 16#00, n := _datatype.size);
+	ELSE
+		MEMMOVE(destAddr := indexAdr, srcAddr := indexAdr + _datatype.size, n := _datatype.size);
+		MEMSET(destAddr := indexAdr + moveSize * _datatype.size, fillByte := 16#00, n := _datatype.size);
+	END_IF
+
+	_length := _length - 1;
+	
+	IF (_length > 1 AND_THEN _length <= capacity / (GROWTH_FACTOR * 2)) THEN
+		Shrink();
+	END_IF
+END_IF
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="RemoveAll" Id="{c9620d31-acbe-4008-ade5-18acfcc46650}">
@@ -246,7 +312,37 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+__DELETE(arr);
+_length := 0;
+
+Alloc();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Shrink" Id="{aec0ac86-82fe-4b60-8072-6413c84fdf18}">
+      <Declaration><![CDATA[
+METHOD PRIVATE Shrink : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	sizeToCopy		: UDINT;
+	allocSize		: UDINT;
+	newArr			: PVOID;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+capacity := capacity / GROWTH_FACTOR;
+allocSize := _datatype.size * capacity;
+newArr := __NEW(BYTE, allocSize);
+
+sizeToCopy := _datatype.size * _length; 
+MEMCPY(destAddr := newArr, srcAddr := arr, n := sizeToCopy);
+
+__DELETE(arr);
+arr := newArr;
+]]></ST>
       </Implementation>
     </Method>
   </POU>

@@ -17,7 +17,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{C0B74987-23BC-4525-966A-A61FC7F0C41B}" Name="SYC" PrjFilePath="SYC\SYC.plcproj" TmcFilePath="SYC\SYC.tmc" ReloadTmc="true" AmsPort="851" FileArchiveSettings="#x000e" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SYC\SYC.tmc" TmcHash="{508CF719-5EE5-24AE-148A-4AA72B4D2730}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SYC\SYC.tmc" TmcHash="{0CE0C27D-EC79-0068-9F0C-05E26EC4CC12}">
 					<Name>SYC Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Contexts>
