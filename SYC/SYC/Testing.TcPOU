@@ -4,29 +4,35 @@
     <Declaration><![CDATA[
 PROGRAM Testing
 VAR
-	myVar	: BOOL;
+	myVar	: INT;
 	myVar2	: BOOL;
 	
-	signal	: SignalProvider; // has only array for 10 variables. Dynamic array is under developement
+//	signal	: Signal(symbol := myVar, createAtStart := 'TON RT TP', invertedLogic := FALSE); // has only array for 10 variables. Dynamic array is under developement
 	
 	test	: BOOL;
-	test2	: BOOL;
+	test2	: ARRAY[0..10] OF INT;
 	
+	mutableArr	: MutableArray;
+	
+	mutTest		: POINTER TO ARRAY[0..10] OF INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[
-signal.Call();
-
 IF test THEN
-	test := FALSE;
-	signal.Get(myVar).timerOn.PT := T#5S;
+	test := false;
+	mutableArr.Append(myVar);
 END_IF
 
-IF test2 THEN
-	test2 := FALSE;
-	signal.Register(myVar2, 'TON RT', TRUE);
-END_IF]]></ST>
+mutableArr.Get(-2,test2[0]);
+mutableArr.Get(-1,test2[1]);
+mutableArr.Get(0,test2[2]);
+mutableArr.Get(1,test2[3]);
+mutableArr.Get(2,test2[4]);
+mutableArr.Get(3,test2[5]);
+
+mutTest := mutableArr.arr;
+]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

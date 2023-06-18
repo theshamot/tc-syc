@@ -5,7 +5,7 @@
 // This is actaully just ANY without pointer
 TYPE ListType :
 STRUCT
-	size		: DINT;
+	size		: UDINT;
 	typeClass	: __SYSTEM.TYPE_CLASS;
 	typeName	: T_MaxString;
 END_STRUCT

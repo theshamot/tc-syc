@@ -29,15 +29,6 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
-    <Method Name="FB_init" Id="{72c30c86-9a2b-4174-ab63-5ba5c80dfcaa}">
-      <Declaration><![CDATA[
-METHOD FB_init : BOOL
-VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-END_VAR
-]]></Declaration>
-    </Method>
     <Method Name="Get" Id="{824eaf5e-6f8d-432d-b9b2-1ece3ecf030d}">
       <Declaration><![CDATA[
 METHOD Get : BOOL
@@ -71,6 +62,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Property Name="LastIndex" Id="{e3810565-2d19-431d-b7d8-71f6d7ac8445}">
+      <Declaration><![CDATA[
+PROPERTY LastIndex : ListLength
+]]></Declaration>
+      <Get Name="Get" Id="{33f96068-472a-4358-9760-71610ab326e1}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
     <Property Name="Length" Id="{75637133-746b-4a7a-a424-c47794c6c5a7}">
       <Declaration><![CDATA[
 PROPERTY Length : ListLength

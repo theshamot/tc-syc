@@ -8,19 +8,37 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
-	arr				: PVOID;
-	_length			: ListLength;
-	_datatype		: ListType;
-	capacity		: ListLength;
+	arr					: POINTER TO BYTE;
+	_length				: ListLength;
+	_datatype			: ListType;
+	capacity			: ListLength;
+	datatypeDefined		: BOOL;
 END_VAR
 VAR CONSTANT
-	GROWTH_FACTOR		: INT := 2;
-	INITIAL_CAPACITY	: INT := 2;
+	GROWTH_FACTOR		: UDINT := 2;
+	INITIAL_CAPACITY	: UDINT := 1;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="Alloc" Id="{e9fde826-391f-4f7d-959a-153b55e3a286}">
+      <Declaration><![CDATA[
+METHOD PRIVATE Alloc : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	allocSize	: UDINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+capacity := INITIAL_CAPACITY;
+allocSize := _datatype.size * capacity;
+arr := __NEW(BYTE, allocSize);
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="Append" Id="{86aa2220-f387-453b-97bc-ba6da17bc618}">
       <Declaration><![CDATA[
 METHOD Append : REFERENCE TO List
@@ -29,7 +47,30 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+IF (NOT datatypeDefined) THEN
+	
+	_datatype.size := TO_UDINT(data.diSize);
+	_datatype.typeClass := data.TypeClass;
+	
+	datatypeDefined := TRUE;
+	
+	Alloc();
+	
+	MEMCPY(destAddr := arr + _length * _datatype.size, srcAddr := data.pValue, n := _datatype.size);
+
+	_length := _length + 1;
+ELSIF (IsTypeCorrect(data)) THEN
+	
+	IF (_length = capacity) THEN
+		Grow();
+	END_IF
+	
+	MEMCPY(destAddr := arr + _length * _datatype.size, srcAddr := data.pValue, n := _datatype.size);
+	
+	_length := _length + 1;
+END_IF
+]]></ST>
       </Implementation>
     </Method>
     <Property Name="Datatype" Id="{be2143a0-bdb5-47e8-bbf8-6e876a9e2c1f}">
@@ -54,26 +95,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="FB_init" Id="{73465e2f-f871-489f-8a73-790e07deac14}">
-      <Declaration><![CDATA[
-METHOD FB_init : BOOL
-VAR_INPUT
-	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
-	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
-	
-	datatype	: ANY;
-END_VAR
-]]></Declaration>
-      <Implementation>
         <ST><![CDATA[
-_datatype.size := datatype.diSize;
-_datatype.typeClass := datatype.TypeClass;
-//_datatype.typeName := SymbolProvider_1.GetDatatype(datatype); // maybe in the future
-
-arr := __NEW(_datatype.size, INITIAL_CAPACITY);
+__DELETE(arr);
 ]]></ST>
       </Implementation>
     </Method>
@@ -84,9 +107,46 @@ VAR_INPUT
 	index		: INT; // Allow for indexing from end
 	destination	: ANY;
 END_VAR
+VAR
+	arrIndex	: UDINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF (index >= 0) THEN
+	arrIndex := TO_UDINT(index);
+ELSE
+	arrIndex := _length + TO_UDINT(index);
+END_IF
+
+IF (_length > 0 AND arrIndex >= 0 AND arrIndex < _length AND IsTypeCorrect(destination)) THEN
+
+	MEMCPY(destAddr := destination.pValue, srcAddr := arr + arrIndex * _datatype.size, n := _datatype.size);
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Grow" Id="{fe355488-e8cb-4e5e-8cc5-a078937f6bab}">
+      <Declaration><![CDATA[METHOD PRIVATE Grow : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	sizeToCopy		: UDINT;
+	allocSize		: UDINT;
+	newArr			: PVOID;
+END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+capacity := capacity * GROWTH_FACTOR;
+allocSize := _datatype.size * capacity;
+newArr := __NEW(BYTE, allocSize);
+
+sizeToCopy := _datatype.size * _length; 
+MEMCPY(destAddr := newArr, srcAddr := arr, n := sizeToCopy);
+
+__DELETE(arr);
+arr := newArr;
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Insert" Id="{3163860b-3538-4103-8d7c-cde0e326ad61}">
@@ -119,9 +179,31 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+IsTypeCorrect :=
+	checkedVariable.diSize = _datatype.size AND
+	checkedVariable.TypeClass = _datatype.typeClass; 
+]]></ST>
       </Implementation>
     </Method>
+    <Property Name="LastIndex" Id="{bfdc84f1-3bf5-4423-99cc-1c7c8c761173}">
+      <Declaration><![CDATA[
+PROPERTY LastIndex : ListLength
+]]></Declaration>
+      <Get Name="Get" Id="{9b3456c7-3462-40dd-a7d3-6055c68bea90}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF (_length = 0) THEN
+	LastIndex := 0;
+ELSE
+	LastIndex := _length - 1;
+END_IF]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Property Name="Length" Id="{6c91b064-294a-425d-93a3-c4864d879a95}">
       <Declaration><![CDATA[
 PROPERTY Length : ListLength

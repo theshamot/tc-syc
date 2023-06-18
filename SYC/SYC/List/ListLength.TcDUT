@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <DUT Name="ListLength" Id="{b702c7b8-eaed-4909-a174-efe76cf1dae8}">
-    <Declaration><![CDATA[TYPE ListLength : INT; END_TYPE
+    <Declaration><![CDATA[
+TYPE ListLength : UDINT; END_TYPE
 ]]></Declaration>
   </DUT>
 </TcPlcObject>
