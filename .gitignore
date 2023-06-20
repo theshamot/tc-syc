@@ -270,6 +270,8 @@ __pycache__/
 *.project.~u
 *.tsproj.bak
 *.xti.bak
+LineIDs.dbg.bak
+LineIDs.dbg
 _Boot/
 _CompileInfo/
 _Libraries/
