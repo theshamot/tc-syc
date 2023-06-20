@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="Testing" Id="{94bd2c2c-8a66-4262-a093-b67fcce3ea6f}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM Testing
 VAR
-	myVar	: INT;
+	myVar	: BOOL;
 	myVar2	: BOOL;
 	
 	testAppend	: BOOL;
@@ -12,22 +12,29 @@ VAR
 	
 	mutableArr	: MutableArray;
 	
-	mutTest		: POINTER TO ARRAY[0..10] OF INT;
+//	mutTest		: POINTER TO ARRAY[0..10] OF INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[IF testAppend THEN
-	testAppend := FALSE;
-	mutableArr.Append(myVar);
-END_IF
+      <ST><![CDATA[//IF testAppend THEN
+//	testAppend := FALSE;
+//	mutableArr.Append(myVar);
+//END_IF
 
-IF testRemove THEN
-	testRemove := FALSE;
-	mutableArr.Remove(removeIndex);
-END_IF
+//IF testRemove THEN
+//	testRemove := FALSE;
+//	mutableArr.Remove(removeIndex);
+//END_IF
 
-mutTest := mutableArr.arr;
-]]></ST>
+//mutTest := mutableArr.arr;
+
+Signal(0);
+
+Signal(myVar).timerOn.PT := T#3S;
+
+IF (Signal(myVar).timerOn.Q) THEN
+	myVar2 := TRUE;
+END_IF]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="SignalProvider" Id="{c34772f0-d050-443b-9d67-92f94521a1c7}" SpecialFunc="None">
     <Declaration><![CDATA[
 FUNCTION_BLOCK SignalProvider
@@ -63,7 +63,7 @@ VAR_INPUT
 	symbol	: REFERENCE TO BOOL;
 END_VAR
 VAR
-	address	: POINTER TO Signal;
+	address	: POINTER TO SignalBundle;
 	i		: INT;
 END_VAR
 ]]></Declaration>
@@ -86,7 +86,7 @@ END_FOR
     </Method>
     <Method Name="Get" Id="{a580a647-5d54-42a7-95e3-e95bacb20b7e}">
       <Declaration><![CDATA[
-METHOD Get : REFERENCE TO Signal
+METHOD Get : REFERENCE TO SignalBundle
 VAR_INPUT
 	symbol	: REFERENCE TO BOOL;
 END_VAR
@@ -109,7 +109,7 @@ END_IF
     </Method>
     <Method Name="Register" Id="{de0d5821-fc53-4549-9de2-506e7021a55e}">
       <Declaration><![CDATA[
-METHOD Register : REFERENCE TO Signal
+METHOD Register : REFERENCE TO SignalBundle
 VAR_INPUT
 	symbol	 		: REFERENCE TO BOOL;
 	create			: STRING;
@@ -119,7 +119,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 mappings[count].symbol := ADR(symbol); // Use the fact, that address of reference is address of the referenced variable
-mappings[count].signal := __NEW(Signal(symbol := symbol, createAtStart := create, invertedLogic := inverted));
+mappings[count].signal := __NEW(SignalBundle(symbol := symbol, createAtStart := create, invertedLogic := inverted));
 
 Register REF= mappings[count].signal^;
 

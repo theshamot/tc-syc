@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="SignalBundle" Id="{8db79964-529c-4eaf-8c71-b8a1feb5d0bf}" SpecialFunc="None">
+    <Declaration><![CDATA[
+{attribute 'enable_dynamic_creation'}
+FUNCTION_BLOCK SignalBundle
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR		
+	symbol				: REFERENCE TO BOOL;
+	invertedLogic		: BOOL;
+	
+	_risingTrigger		: POINTER TO R_TRIG;
+	_fallingTrigger		: POINTER TO F_TRIG;
+	_timerOn			: POINTER TO TON;
+	_timerOff			: POINTER TO TOF;
+	_timerPulse			: POINTER TO TP;
+	
+	timerOnIO			: SignalTimer;
+	timerOffIO			: SignalTimer;
+	timerPulseIO		: SignalTimer;
+	
+	symbolVal			: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Call" Id="{9994d17f-fdff-4a82-94fb-7898096407fd}">
+      <Declaration><![CDATA[METHOD Call : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[symbolVal := symbol XOR invertedLogic;
+
+IF (_risingTrigger <> 0) THEN
+	
+	_risingTrigger^(CLK := symbolVal);
+END_IF
+IF (_fallingTrigger <> 0) THEN
+	
+	_fallingTrigger^(CLK := symbolVal);
+END_IF
+IF (_timerOn <> 0) THEN
+	
+	_timerOn^(IN := symbolVal);
+END_IF
+IF (_timerOff <> 0) THEN
+	
+	_timerOff^(IN := symbolVal);
+END_IF
+IF (_timerPulse <> 0) THEN
+	
+	_timerPulse^(IN := symbolVal);
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="fallingTrigger" Id="{f43d2c72-6842-4e33-af1d-87fa7cb93ebe}">
+      <Declaration><![CDATA[
+PROPERTY fallingTrigger : REFERENCE TO BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{30dadcb0-f212-46e8-9be4-9e41196f7dcf}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[
+IF (_fallingTrigger = 0) THEN
+	
+	_fallingTrigger := __NEW(F_TRIG);
+END_IF
+
+fallingTrigger REF= _fallingTrigger^.Q;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="FB_exit" Id="{2e664908-60a2-45ac-9e16-956572ed33c2}">
+      <Declaration><![CDATA[
+METHOD FB_exit : BOOL
+VAR_INPUT
+	bInCopyCode : BOOL; // if TRUE, the exit method is called for exiting an instance that is copied afterwards (online change).
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF (_risingTrigger <> 0) THEN
+	
+	__DELETE(_risingTrigger);
+END_IF
+IF (_fallingTrigger <> 0) THEN
+	
+	__DELETE(_fallingTrigger);
+END_IF
+IF (_timerOn <> 0) THEN
+	
+	__DELETE(_timerOn);
+END_IF
+IF (_timerOff <> 0) THEN
+	
+	__DELETE(_timerOff);
+END_IF
+IF (_timerPulse <> 0) THEN
+	
+	__DELETE(_timerPulse);
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="FB_init" Id="{5f9556ae-ca44-4b34-a729-9f5ed3e4eb51}">
+      <Declaration><![CDATA[
+METHOD FB_init : BOOL
+VAR_INPUT
+	bInitRetains : BOOL; // if TRUE, the retain variables are initialized (warm start / cold start)
+	bInCopyCode : BOOL;  // if TRUE, the instance afterwards gets moved into the copy code (online change)
+	
+	symbol			: REFERENCE TO BOOL; // Binded variable
+	createAtStart	: STRING; // If strings RT, FT, TON, TOF, PT are found, then corresponding triggers or timers are created during init.
+	invertedLogic	: BOOL; // Some variables (e.g. optical gates) may have inverted logic
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+THIS^.symbol REF= symbol;
+THIS^.invertedLogic := invertedLogic;
+
+IF (FIND(createAtStart, 'RT') > 0) THEN
+
+	risingTrigger;
+END_IF
+IF (FIND(createAtStart, 'FT') > 0) THEN
+
+	fallingTrigger;
+END_IF
+IF (FIND(createAtStart, 'TON') > 0) THEN
+
+	timerOn;
+END_IF
+IF (FIND(createAtStart, 'TOF') > 0) THEN
+
+	timerOff;
+END_IF
+IF (FIND(createAtStart, 'PT') > 0) THEN
+
+	timerPulse;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="risingTrigger" Id="{5ad0c8c4-5f9f-4b09-ad96-2fc02db3f57f}">
+      <Declaration><![CDATA[
+PROPERTY risingTrigger : REFERENCE TO BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{90ca7040-f1de-4c74-aed5-38ce8db3bc8a}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[
+IF (_risingTrigger = 0) THEN
+	
+	_risingTrigger := __NEW(R_TRIG);
+END_IF
+
+risingTrigger REF= _risingTrigger^.Q;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="timerOff" Id="{7cdb1405-464e-4eeb-b83e-6655d84d888b}">
+      <Declaration><![CDATA[
+PROPERTY timerOff : REFERENCE TO SignalTimer
+]]></Declaration>
+      <Get Name="Get" Id="{cb433fcf-cf87-42c1-8c44-9f8510d7c2cf}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[
+IF (_timerOff = 0) THEN
+	
+	_timerOff := __NEW(TOF);
+	timerOffIO.PT REF= _timerOff^.PT;
+	timerOffIO.ET REF= _timerOff^.ET;
+	timerOffIO.Q REF= _timerOff^.Q;
+END_IF
+
+timerOff REF= timerOffIO;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="timerOn" Id="{388230c8-877f-4d8f-8ed7-492575bdee4f}">
+      <Declaration><![CDATA[
+PROPERTY timerOn : REFERENCE TO SignalTimer
+]]></Declaration>
+      <Get Name="Get" Id="{98223953-fbf9-4889-ae90-009f1d3040de}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[
+IF (_timerOn = 0) THEN
+	
+	_timerOn := __NEW(TON);
+	timerOnIO.PT REF= _timerOn^.PT;
+	timerOnIO.ET REF= _timerOn^.ET;
+	timerOnIO.Q REF= _timerOn^.Q;
+END_IF
+
+timerOn REF= timerOnIO;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="timerPulse" Id="{ca8dba7e-a51a-4d5c-8d7b-e5e5a10d5161}">
+      <Declaration><![CDATA[
+PROPERTY timerPulse : REFERENCE TO SignalTimer
+]]></Declaration>
+      <Get Name="Get" Id="{429e00fd-b91e-4ddd-900d-cc5159e6460a}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[
+IF (_timerPulse = 0) THEN
+	
+	_timerPulse := __NEW(TP);
+	timerPulseIO.PT REF= _timerPulse^.PT;
+	timerPulseIO.ET REF= _timerPulse^.ET;
+	timerPulseIO.Q REF= _timerPulse^.Q;
+END_IF
+
+timerPulse REF= timerPulseIO;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>
