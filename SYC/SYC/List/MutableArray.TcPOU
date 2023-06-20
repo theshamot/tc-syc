@@ -48,6 +48,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
+Append REF= THIS^;
+
 IF (NOT datatypeDefined) THEN
 	
 	_datatype.size := TO_UDINT(data.diSize);
@@ -184,6 +186,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
+Insert REF= THIS^;
+
 arrIndex := GetArrayIndex(index);
 
 IF (NOT datatypeDefined AND arrIndex = 0) THEN
@@ -302,6 +306,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
+Prepend REF= THIS^;
+
 IF (NOT datatypeDefined) THEN
 	
 	_datatype.size := TO_UDINT(data.diSize);
@@ -342,6 +348,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
+Remove REF= THIS^;
+
 IF (_length = 0) THEN
 	RETURN;
 END_IF
@@ -376,6 +384,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
+RemoveAll REF= THIS^;
+
 __DELETE(arr);
 _length := 0;
 
