@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="MutableArray" Id="{0896bf5a-c1f5-4c12-a811-5a62ae580db1}" SpecialFunc="None">
     <Declaration><![CDATA[
 FUNCTION_BLOCK MutableArray IMPLEMENTS List
@@ -176,9 +176,47 @@ VAR_INPUT
 	index	: INT; // Allow for indexing from end
 	data	: ANY;
 END_VAR
+VAR
+	arrIndex	: UDINT;
+	moveLength	: UDINT;
+	indexAdr	: PVOID;
+END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+arrIndex := GetArrayIndex(index);
+
+IF (NOT datatypeDefined AND arrIndex = 0) THEN
+	
+	_datatype.size := TO_UDINT(data.diSize);
+	_datatype.typeClass := data.TypeClass;
+	
+	datatypeDefined := TRUE;
+	
+	Alloc();
+	
+	MEMCPY(destAddr := arr + _length * _datatype.size, srcAddr := data.pValue, n := _datatype.size);
+
+	_length := _length + 1;
+ELSIF (IsTypeCorrect(data)) THEN
+	IF (IsArrayIndexValid(arrIndex) OR _length = 0 OR arrIndex = _length) THEN
+
+		IF (_length = capacity) THEN
+			Grow();
+		END_IF
+		
+		moveLength := _length - arrIndex;
+		indexAdr := arr + arrIndex * _datatype.size;
+		IF (moveLength > 0) THEN
+			MEMMOVE(destAddr := indexAdr + _datatype.size, srcAddr := indexAdr, n := moveLength * _datatype.size);
+		END_IF
+		
+		MEMCPY(destAddr := indexAdr, srcAddr := data.pValue, n := _datatype.size);
+		
+		_length := _length + 1;
+	END_IF
+END_IF
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="IsArrayIndexValid" Id="{c6a78dd1-a9ee-4fc6-949a-5e338a333330}">
@@ -263,7 +301,31 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[]]></ST>
+        <ST><![CDATA[
+IF (NOT datatypeDefined) THEN
+	
+	_datatype.size := TO_UDINT(data.diSize);
+	_datatype.typeClass := data.TypeClass;
+	
+	datatypeDefined := TRUE;
+	
+	Alloc();
+	
+	MEMCPY(destAddr := arr + _length * _datatype.size, srcAddr := data.pValue, n := _datatype.size);
+
+	_length := _length + 1;
+ELSIF (IsTypeCorrect(data)) THEN
+	
+	IF (_length = capacity) THEN
+		Grow();
+	END_IF
+	
+	MEMMOVE(destAddr := arr + _datatype.size, srcAddr := arr, n := _length * _datatype.size);
+	MEMCPY(destAddr := arr, srcAddr := data.pValue, n := _datatype.size);
+	
+	_length := _length + 1;
+END_IF
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="Remove" Id="{16520934-f476-4100-947a-a822d99cb105}">
@@ -274,9 +336,10 @@ VAR_INPUT
 END_VAR
 VAR
 	arrIndex	: UDINT;
-	moveSize	: UDINT;
+	moveLength	: UDINT;
 	indexAdr	: PVOID;
-END_VAR]]></Declaration>
+END_VAR
+]]></Declaration>
       <Implementation>
         <ST><![CDATA[
 IF (_length = 0) THEN
@@ -287,13 +350,13 @@ arrIndex := GetArrayIndex(index);
 
 IF (IsArrayIndexValid(arrIndex)) THEN
 
-	moveSize := LastIndex - arrIndex;
+	moveLength := LastIndex - arrIndex;
 	indexAdr := arr + arrIndex * _datatype.size;
-	IF (moveSize = 0) THEN
+	IF (moveLength = 0) THEN
 		MEMSET(destAddr := indexAdr, fillByte := 16#00, n := _datatype.size);
 	ELSE
-		MEMMOVE(destAddr := indexAdr, srcAddr := indexAdr + _datatype.size, n := _datatype.size);
-		MEMSET(destAddr := indexAdr + moveSize * _datatype.size, fillByte := 16#00, n := _datatype.size);
+		MEMMOVE(destAddr := indexAdr, srcAddr := indexAdr + _datatype.size, n := moveLength * _datatype.size);
+		MEMSET(destAddr := indexAdr + moveLength * _datatype.size, fillByte := 16#00, n := _datatype.size);
 	END_IF
 
 	_length := _length - 1;

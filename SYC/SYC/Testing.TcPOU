@@ -3,38 +3,59 @@
   <POU Name="Testing" Id="{94bd2c2c-8a66-4262-a093-b67fcce3ea6f}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM Testing
 VAR
-	myVar	: BOOL;
+	myVar	: INT;
 	myVar2	: BOOL;
 	
 	testAppend	: BOOL;
+	testPrepend	: BOOL;
+	testInsert	: BOOL;
 	testRemove	: BOOL;
-	removeIndex	: INT;
+	testRemoveAll: BOOL;
 	
+	index		: INT;
+
 	mutableArr	: MutableArray;
 	
-//	mutTest		: POINTER TO ARRAY[0..10] OF INT;
+	mutTest		: POINTER TO ARRAY[0..10] OF INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//IF testAppend THEN
-//	testAppend := FALSE;
-//	mutableArr.Append(myVar);
-//END_IF
+      <ST><![CDATA[IF testAppend THEN
+	testAppend := FALSE;
+	myVar := 10;
+	mutableArr.Append(myVar);
+	myVar := 11;
+	mutableArr.Append(myVar);
+	myVar := 12;
+	mutableArr.Append(myVar);
+END_IF
 
-//IF testRemove THEN
-//	testRemove := FALSE;
-//	mutableArr.Remove(removeIndex);
-//END_IF
+IF testPrepend THEN
+	testPrepend := FALSE;
+	myVar := 9;
+	mutableArr.Prepend(myVar);
+	myVar := 8;
+	mutableArr.Prepend(myVar);
+	myVar := 7;
+	mutableArr.Prepend(myVar);
+END_IF
 
-//mutTest := mutableArr.arr;
+IF testInsert THEN
+	testInsert := FALSE;
+	mutableArr.Insert(index, myVar);
+END_IF
 
-Signal(0);
+IF testRemove THEN
+	testRemove := FALSE;
+	mutableArr.Remove(index);
+END_IF
 
-Signal(myVar).timerOn.PT := T#3S;
+IF testRemoveAll THEN
+	testRemoveAll := FALSE;
+	mutableArr.RemoveAll();
+END_IF
 
-IF (Signal(myVar).timerOn.Q) THEN
-	myVar2 := TRUE;
-END_IF]]></ST>
+mutTest := mutableArr.arr;]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>
