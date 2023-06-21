@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <Itf Name="Map" Id="{146369a2-4033-4e62-9317-7f3cc6a92fab}">
+    <Declaration><![CDATA[
+INTERFACE Map
+]]></Declaration>
+  </Itf>
+</TcPlcObject>

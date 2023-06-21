@@ -53,7 +53,7 @@ Append := THIS^;
 IF (NOT datatypeDefined) THEN
 	
 	_datatype.size := TO_UDINT(data.diSize);
-	_datatype.typeClass := data.TypeClass;
+	_datatype.class := data.TypeClass;
 	
 	datatypeDefined := TRUE;
 	
@@ -193,7 +193,7 @@ arrIndex := GetArrayIndex(index);
 IF (NOT datatypeDefined AND arrIndex = 0) THEN
 	
 	_datatype.size := TO_UDINT(data.diSize);
-	_datatype.typeClass := data.TypeClass;
+	_datatype.class := data.TypeClass;
 	
 	datatypeDefined := TRUE;
 	
@@ -259,7 +259,7 @@ END_VAR
         <ST><![CDATA[
 IsTypeCorrect :=
 	checkedVariable.diSize = _datatype.size AND
-	checkedVariable.TypeClass = _datatype.typeClass; 
+	checkedVariable.TypeClass = _datatype.class; 
 ]]></ST>
       </Implementation>
     </Method>
@@ -311,7 +311,7 @@ Prepend := THIS^;
 IF (NOT datatypeDefined) THEN
 	
 	_datatype.size := TO_UDINT(data.diSize);
-	_datatype.typeClass := data.TypeClass;
+	_datatype.class := data.TypeClass;
 	
 	datatypeDefined := TRUE;
 	
@@ -391,6 +391,18 @@ _length := 0;
 
 Alloc();
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Set" Id="{a7efc0c7-79f4-4457-9e60-353127589ca3}">
+      <Declaration><![CDATA[
+METHOD Set : List
+VAR_INPUT
+	index	: INT; // Allow for indexing from end
+	data	: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
       </Implementation>
     </Method>
     <Method Name="Shrink" Id="{aec0ac86-82fe-4b60-8072-6413c84fdf18}">

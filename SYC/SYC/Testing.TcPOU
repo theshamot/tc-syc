@@ -18,6 +18,8 @@ VAR
 	mutableArr	: MutableArray;
 	
 	mutTest		: POINTER TO ARRAY[0..10] OF INT;
+	
+	pFB		: POINTER TO BYTE;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -63,6 +65,8 @@ mutTest := mutableArr.arr;
 //Signal(myVar).timerOn.PT := T#3S;
 //myVar2 S= Signal(myVar).timerOn.Q;
 //myVar2 R= Signal(myVar).fallingTrigger;
+
+pFB := ADR(MutableArray);
 ]]></ST>
     </Implementation>
   </POU>

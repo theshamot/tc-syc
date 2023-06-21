@@ -21,22 +21,28 @@
     <Compile Include="Class Diagram.TcCD">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Collection\HashMap.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Collection\Map.TcIO">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Condition\CResult.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Condition\Is.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="List\MutableArray.TcPOU">
+    <Compile Include="Collection\MutableArray.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="List\List.TcIO">
+    <Compile Include="Collection\List.TcIO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="List\ListLength.TcDUT">
+    <Compile Include="Collection\ListLength.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="List\ListType.TcDUT">
+    <Compile Include="Collection\ListType.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MAIN.TcPOU">
@@ -152,7 +158,7 @@
   <ItemGroup>
     <Folder Include="Misc" />
     <Folder Include="Condition" />
-    <Folder Include="List" />
+    <Folder Include="Collection" />
     <Folder Include="Signal" />
     <Folder Include="Sequencer\WIP" />
     <Folder Include="SimpleStepLogger" />

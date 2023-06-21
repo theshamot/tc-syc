@@ -101,5 +101,14 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
     </Method>
+    <Method Name="Set" Id="{6c6bbffc-6a30-40ea-994d-315294a55206}">
+      <Declaration><![CDATA[
+METHOD Set : List
+VAR_INPUT
+	index	: INT; // Allow for indexing from end
+	data	: ANY;
+END_VAR
+]]></Declaration>
+    </Method>
   </Itf>
 </TcPlcObject>
