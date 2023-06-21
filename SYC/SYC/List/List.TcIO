@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <Itf Name="List" Id="{70fa5247-5b57-4846-9db9-81ed1f26b16a}">
     <Declaration><![CDATA[
 INTERFACE List
 ]]></Declaration>
     <Method Name="Append" Id="{a92455fb-c069-4c4d-8706-764afa701dba}">
       <Declaration><![CDATA[
-METHOD Append : REFERENCE TO List
+METHOD Append : List
 VAR_INPUT
 	data	: ANY;
 END_VAR
@@ -40,7 +40,7 @@ END_VAR
     </Method>
     <Method Name="Insert" Id="{4d53e841-01dc-4246-9b49-a63507f8c33f}">
       <Declaration><![CDATA[
-METHOD Insert : REFERENCE TO List
+METHOD Insert : List
 VAR_INPUT
 	index	: INT; // Allow for indexing from end
 	data	: ANY;
@@ -80,7 +80,7 @@ PROPERTY Length : ListLength
     </Property>
     <Method Name="Prepend" Id="{7546d95c-bb34-4096-8df9-689a87c4271c}">
       <Declaration><![CDATA[
-METHOD Prepend : REFERENCE TO List
+METHOD Prepend : List
 VAR_INPUT
 	data	: ANY;
 END_VAR
@@ -88,7 +88,7 @@ END_VAR
     </Method>
     <Method Name="Remove" Id="{ef067663-f6a4-4c4f-a4f7-a2422263ba02}">
       <Declaration><![CDATA[
-METHOD Remove : REFERENCE TO List
+METHOD Remove : List
 VAR_INPUT
 	index	: INT; // Allow for indexing from end
 END_VAR
@@ -96,7 +96,7 @@ END_VAR
     </Method>
     <Method Name="RemoveAll" Id="{52c369d5-946b-41da-9dcf-b0be62710028}">
       <Declaration><![CDATA[
-METHOD RemoveAll : REFERENCE TO List
+METHOD RemoveAll : List
 VAR_INPUT
 END_VAR
 ]]></Declaration>

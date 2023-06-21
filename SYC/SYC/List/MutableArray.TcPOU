@@ -41,14 +41,14 @@ arr := __NEW(BYTE, allocSize);
     </Method>
     <Method Name="Append" Id="{86aa2220-f387-453b-97bc-ba6da17bc618}">
       <Declaration><![CDATA[
-METHOD Append : REFERENCE TO List
+METHOD Append : List
 VAR_INPUT
 	data	: ANY;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-Append REF= THIS^;
+Append := THIS^;
 
 IF (NOT datatypeDefined) THEN
 	
@@ -173,7 +173,7 @@ arr := newArr;
     </Method>
     <Method Name="Insert" Id="{3163860b-3538-4103-8d7c-cde0e326ad61}">
       <Declaration><![CDATA[
-METHOD Insert : REFERENCE TO List
+METHOD Insert : List
 VAR_INPUT
 	index	: INT; // Allow for indexing from end
 	data	: ANY;
@@ -186,7 +186,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-Insert REF= THIS^;
+Insert := THIS^;
 
 arrIndex := GetArrayIndex(index);
 
@@ -299,14 +299,14 @@ END_VAR
     </Property>
     <Method Name="Prepend" Id="{6c7dd413-0931-4486-b546-958b79c32840}">
       <Declaration><![CDATA[
-METHOD Prepend : REFERENCE TO List
+METHOD Prepend : List
 VAR_INPUT
 	data	: ANY;
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-Prepend REF= THIS^;
+Prepend := THIS^;
 
 IF (NOT datatypeDefined) THEN
 	
@@ -336,7 +336,7 @@ END_IF
     </Method>
     <Method Name="Remove" Id="{16520934-f476-4100-947a-a822d99cb105}">
       <Declaration><![CDATA[
-METHOD Remove : REFERENCE TO List
+METHOD Remove : List
 VAR_INPUT
 	index		: INT; // Allow for indexing from end
 END_VAR
@@ -348,7 +348,7 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-Remove REF= THIS^;
+Remove := THIS^;
 
 IF (_length = 0) THEN
 	RETURN;
@@ -378,13 +378,13 @@ END_IF
     </Method>
     <Method Name="RemoveAll" Id="{c9620d31-acbe-4008-ade5-18acfcc46650}">
       <Declaration><![CDATA[
-METHOD RemoveAll : REFERENCE TO List
+METHOD RemoveAll : List
 VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[
-RemoveAll REF= THIS^;
+RemoveAll := THIS^;
 
 __DELETE(arr);
 _length := 0;
