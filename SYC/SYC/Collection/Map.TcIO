@@ -1,8 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="Map" Id="{146369a2-4033-4e62-9317-7f3cc6a92fab}">
     <Declaration><![CDATA[
 INTERFACE Map
 ]]></Declaration>
+    <Method Name="Get" Id="{aa068e1c-c859-4eda-95c0-aedd78a5c5f1}">
+      <Declaration><![CDATA[
+METHOD Get : BOOL
+VAR_INPUT
+	
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Put" Id="{b3fcbb06-7422-4e57-a623-f6cfcb1fa52b}">
+      <Declaration><![CDATA[
+METHOD Put : Map
+VAR_INPUT
+	key			: ANY;
+	value		: ANY;
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="Remove" Id="{7fbc5edf-be80-49da-a972-9ee5e19781d5}">
+      <Declaration><![CDATA[
+METHOD Remove : Map
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Method Name="RemoveAll" Id="{bdd0f1bc-ba83-47d0-9d2a-3ce1a3925ec3}">
+      <Declaration><![CDATA[
+METHOD RemoveAll : Map
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
   </Itf>
 </TcPlcObject>

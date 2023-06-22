@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="HashMap" Id="{034d47c3-248f-4e5a-a7e3-eda5f7ee95dc}" SpecialFunc="None">
     <Declaration><![CDATA[
 FUNCTION_BLOCK HashMap IMPLEMENTS Map
@@ -8,10 +8,65 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	//needs custom array handling instead of mutable array
+	keys		:	MutableArray;
+	values		: 	MutableArray;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="Get" Id="{730b9175-d682-4573-a2ca-c45acb868c7c}">
+      <Declaration><![CDATA[
+METHOD Get : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Put" Id="{088e2256-ab8d-49cf-9afb-75424e8a098d}">
+      <Declaration><![CDATA[
+METHOD Put : Map
+VAR_INPUT
+	key			: ANY;
+	value		: ANY;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF (((keys.DatatypeDefined AND values.DatatypeDefined) AND_THEN
+	 (keys.IsTypeCorrect(key) AND values.IsTypeCorrect(value))) OR_ELSE
+	(NOT keys.DatatypeDefined AND NOT values.DatatypeDefined)) THEN
+	
+	// needs hash function and custom array handling instead of mutable array
+	keys.Append(key);
+	values.Append(value);
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Remove" Id="{4108f5e9-5a1a-45a9-9df2-60b61f36f797}">
+      <Declaration><![CDATA[
+METHOD Remove : Map
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RemoveAll" Id="{25650b38-74e4-451c-958f-073f166fa389}">
+      <Declaration><![CDATA[
+METHOD RemoveAll : Map
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[]]></ST>
+      </Implementation>
+    </Method>
   </POU>
 </TcPlcObject>

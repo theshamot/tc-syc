@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="MutableArray" Id="{0896bf5a-c1f5-4c12-a811-5a62ae580db1}" SpecialFunc="None">
     <Declaration><![CDATA[
+{attribute 'hide_all_locals'}
 FUNCTION_BLOCK MutableArray IMPLEMENTS List
 VAR_INPUT
 END_VAR
@@ -12,7 +13,7 @@ VAR
 	_length				: ListLength;
 	_datatype			: ListType;
 	capacity			: ListLength;
-	datatypeDefined		: BOOL;
+	_datatypeDefined	: BOOL;
 END_VAR
 VAR CONSTANT
 	GROWTH_FACTOR		: UDINT := 2;
@@ -50,12 +51,12 @@ END_VAR
         <ST><![CDATA[
 Append := THIS^;
 
-IF (NOT datatypeDefined) THEN
+IF (NOT _datatypeDefined) THEN
 	
 	_datatype.size := TO_UDINT(data.diSize);
 	_datatype.class := data.TypeClass;
 	
-	datatypeDefined := TRUE;
+	_datatypeDefined := TRUE;
 	
 	Alloc();
 	
@@ -85,7 +86,25 @@ VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[]]></ST>
+          <ST><![CDATA[
+Datatype := _datatype;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Property Name="DatatypeDefined" Id="{3f5e3c60-3002-4aaa-8ae5-8a8b11bc31b0}">
+      <Declaration><![CDATA[
+PROPERTY DatatypeDefined : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{efb3caee-0dd2-4431-b155-ef06b04de626}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[
+DatatypeDefined := _datatypeDefined;
+]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -190,12 +209,12 @@ Insert := THIS^;
 
 arrIndex := GetArrayIndex(index);
 
-IF (NOT datatypeDefined AND arrIndex = 0) THEN
+IF (NOT _datatypeDefined AND arrIndex = 0) THEN
 	
 	_datatype.size := TO_UDINT(data.diSize);
 	_datatype.class := data.TypeClass;
 	
-	datatypeDefined := TRUE;
+	_datatypeDefined := TRUE;
 	
 	Alloc();
 	
@@ -293,7 +312,9 @@ VAR
 END_VAR
 ]]></Declaration>
         <Implementation>
-          <ST><![CDATA[]]></ST>
+          <ST><![CDATA[
+Length := _length;
+]]></ST>
         </Implementation>
       </Get>
     </Property>
@@ -308,12 +329,12 @@ END_VAR
         <ST><![CDATA[
 Prepend := THIS^;
 
-IF (NOT datatypeDefined) THEN
+IF (NOT _datatypeDefined) THEN
 	
 	_datatype.size := TO_UDINT(data.diSize);
 	_datatype.class := data.TypeClass;
 	
-	datatypeDefined := TRUE;
+	_datatypeDefined := TRUE;
 	
 	Alloc();
 	

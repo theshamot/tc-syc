@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <Itf Name="List" Id="{70fa5247-5b57-4846-9db9-81ed1f26b16a}">
     <Declaration><![CDATA[
 INTERFACE List
@@ -17,6 +17,13 @@ END_VAR
 PROPERTY Datatype : ListType
 ]]></Declaration>
       <Get Name="Get" Id="{b138e580-5c0c-42fd-b580-7eb9da2885e9}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+    <Property Name="DatatypeDefined" Id="{9d9d2533-09e2-48b3-929a-fc5d087ac217}">
+      <Declaration><![CDATA[PROPERTY DatatypeDefined : BOOL
+]]></Declaration>
+      <Get Name="Get" Id="{8ddb38aa-4597-45c4-ad8a-1daaa68377b4}">
         <Declaration><![CDATA[]]></Declaration>
       </Get>
     </Property>
