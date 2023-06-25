@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="System" Id="{fd898ed2-9c53-4969-9e3a-245cd851a3ca}" SpecialFunc="None">
+    <Declaration><![CDATA[
+FUNCTION System : REFERENCE TO SystemBundle
+VAR_INPUT
+END_VAR
+VAR
+	bundle		: SystemBundle;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+bundle.Call();
+
+System REF= bundle;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

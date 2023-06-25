@@ -6,11 +6,18 @@ VAR
 	test		: STRING := 'ahoj';
 	byteContent	: ARRAY[1..SIZEOF(test)] OF BYTE;
 	
-	
+	beat : BOOL;
+	t : STRING;
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[test := to_string(ADR(byteContent));]]></ST>
+      <ST><![CDATA[test := TO_STRING(ADR(byteContent));
+
+CallThisSingleTimeEachCycle();
+
+
+beat := System().GetTaskHeartbeat();
+t := System().TimeProvider.GetTimeString('{h}:{m}:{s},{S}');]]></ST>
     </Implementation>
   </POU>
 </TcPlcObject>

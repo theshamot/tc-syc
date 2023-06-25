@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="SystemBundle" Id="{cfe906a7-cb4d-49b4-a6a1-3e9b01fb4a45}" SpecialFunc="None">
+    <Declaration><![CDATA[
+FUNCTION_BLOCK SystemBundle
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	_timeProvider		: TimeProvider;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="Call" Id="{a86f7c66-f1a5-4ec2-a690-f1af2a631b65}">
+      <Declaration><![CDATA[METHOD Call : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+_timeProvider();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="GetTaskHeartbeat" Id="{919fd3d0-2e58-4a8a-97d4-6abedb9132b7}">
+      <Declaration><![CDATA[
+METHOD GetTaskHeartbeat : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+GetTaskHeartbeat := TaskHeartbeat(update := FALSE);
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="TimeProvider" Id="{4ff49010-98e8-4db2-a0eb-45c0a43fd21f}">
+      <Declaration><![CDATA[PROPERTY TimeProvider : REFERENCE TO TimeProvider
+]]></Declaration>
+      <Get Name="Get" Id="{4df5db3e-22e7-4af9-a3e4-1d803909c512}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[
+TimeProvider REF= _timeProvider;
+]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+  </POU>
+</TcPlcObject>

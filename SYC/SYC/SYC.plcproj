@@ -142,10 +142,22 @@
     <Compile Include="Testing.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tools\CallThisSingleTimeEachCycle.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tools\TaskHeartbeat.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tools\Regex.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tools\RegexMatch.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tools\System.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tools\SystemBundle.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tools\WRegex.TcPOU">

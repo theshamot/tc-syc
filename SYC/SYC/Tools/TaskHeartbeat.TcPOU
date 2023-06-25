@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TaskHeartbeat" Id="{d973c915-447b-480e-a34b-22f0c4d74dca}" SpecialFunc="None">
+    <Declaration><![CDATA[
+FUNCTION TaskHeartbeat : BOOL;
+VAR_INPUT
+	update		: BOOL;
+END_VAR
+VAR_STAT
+	_beat		: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF (update) THEN
+	_beat := NOT _beat;
+END_IF
+
+TaskHeartbeat := _beat;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
